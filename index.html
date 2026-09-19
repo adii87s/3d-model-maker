@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3D Assembly Maker</title>
+<style>
+:root{--bg:#edf2f7;--panel:#fff;--card:#f5f7fa;--text:#17212b;--muted:#627283;--line:#d4dde6;--blue:#1769b1;--active:#e6f1fb}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button,input{font:inherit}.app{max-width:1450px;margin:auto;padding:20px}.top{display:flex;justify-content:space-between;gap:16px;align-items:end;margin-bottom:16px}.ey{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--blue)}h1{margin:3px 0;font-size:30px}.sub{margin:0;color:var(--muted);max-width:820px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 13px;font-weight:700;cursor:pointer}.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}.grid{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:16px}.col{display:flex;flex-direction:column;gap:16px}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}.dropgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.drop{border:1px dashed #aebdca;border-radius:13px;padding:16px;text-align:center;background:var(--card);cursor:pointer}.drop input{display:none}.drop b{display:block;margin-bottom:5px}.muted{color:var(--muted);font-size:12px}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.viewer{height:590px;border-radius:12px;overflow:hidden;background:#dfe6ed;border:1px solid var(--line)}canvas{display:block;width:100%;height:100%}.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.badge{padding:5px 9px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--muted);font-size:12px}.steps{display:flex;flex-direction:column;gap:7px;margin-top:10px;max-height:390px;overflow:auto}.step{width:100%;display:flex;gap:9px;text-align:left;border:1px solid var(--line);background:var(--card);padding:10px;border-radius:10px;cursor:pointer}.step.active{border-color:var(--blue);background:var(--active)}.num{width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);color:var(--blue);font-weight:800;flex:none}.step.done .num{background:var(--blue);color:#fff;border-color:var(--blue)}.step strong{display:block}.step span:last-child{display:block;color:var(--muted);font-size:12px;margin-top:2px}.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.chip{font-size:12px;padding:4px 9px;border-radius:999px;background:var(--card);border:1px solid var(--line)}.refs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}.ref{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card);padding:0;cursor:zoom-in}.ref img{display:block;width:100%;height:110px;object-fit:cover;background:#fff}.ref span{display:block;padding:6px 8px;text-align:left;color:var(--muted);font-size:11px}.status{margin-top:9px;color:var(--muted);font-size:12px}.light{position:fixed;inset:0;background:rgba(3,8,14,.85);display:grid;place-items:center;padding:20px;z-index:10}.light.hidden{display:none}.light img{max-width:90vw;max-height:82vh;border-radius:10px;background:#fff}.light button{position:fixed;right:20px;top:20px;border:0;background:#fff;border-radius:50%;width:38px;height:38px;font-size:25px;cursor:pointer}
+@media(max-width:1000px){.grid{grid-template-columns:1fr}.dropgrid{grid-template-columns:1fr}.viewer{height:500px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><div><div class="ey">ASSEMBLY INTELLIGENCE</div><h1>3D Assembly Maker</h1><p class="sub">Upload an assembly sheet and product photos. The app turns the extracted sequence into a reviewable animated 3D assembly definition.</p></div><div class="actions"><button class="btn" id="demo">Load Hydep demo</button><button class="btn primary" id="export">Export assembly.json</button></div></header>
+<main class="grid">
+<div class="col">
+<section class="card">
+<div class="row"><div><div class="ey">1 · INPUTS</div><h2>Project files</h2></div><span class="badge" id="badge">No project loaded</span></div>
+<div class="dropgrid">
+<label class="drop"><input id="sheet" type="file" accept=".xlsx,.xls,.csv,.json"><b>Assembly sheet</b><span class="muted">Excel / CSV / JSON</span><div class="status" id="sheetName">Choose a file</div></label>
+<label class="drop"><input id="photos" type="file" accept="image/*" multiple><b>Product photos</b><span class="muted">Step photos / drawings</span><div class="status" id="photoName">No photos selected</div></label>
+<label class="drop"><input id="models" type="file" accept=".glb,.gltf,.obj,.step,.stp,.iges,.igs" multiple><b>3D models</b><span class="muted">Optional CAD / GLB</span><div class="status" id="modelName">Optional</div></label>
+</div>
+<div class="controls"><button class="btn primary" id="analyze">Analyze & build</button><span class="status" id="analyzeStatus">Ready</span></div>
+</section>
+<section class="card">
+<div class="row"><div><div class="ey">2 · 3D REVIEW</div><h2 id="title">Ready</h2></div><div class="actions"><span class="badge" id="source">Approximate geometry</span><span class="badge" id="progress">0 / 0</span></div></div>
+<div class="viewer" id="viewer"></div>
+<div class="controls"><button class="btn" id="prev">← Previous</button><button class="btn primary" id="next">▶ Assemble next</button><button class="btn" id="auto">Auto play</button><button class="btn" id="explode">Exploded view</button><button class="btn" id="reset">Reset</button></div>
+</section>
+</div>
+<aside class="col">
+<section class="card"><div class="ey">3 · SEQUENCE</div><div class="row"><h2>Assembly steps</h2><span class="badge" id="count">0 steps</span></div><div class="steps" id="steps"></div></section>
+<section class="card"><div class="ey">CURRENT STEP</div><h2 id="detailTitle">No step selected</h2><p class="sub" id="detailText">Load the demo or analyze an assembly sheet.</p><div class="chips" id="chips"></div><div class="refs" id="refs"></div></section>
+<section class="card"><div class="ey">MODEL STATUS</div><p class="row"><span>3D source</span><b id="modelSource">Procedural approximation</b></p><p class="row"><span>Parts</span><b id="parts">0</b></p><p class="row"><span>References</span><b id="refCount">0</b></p><p class="status">Human review is required. A single photo is not enough to guarantee engineering-accurate CAD.</p></section>
+</aside>
+</main>
+</div>
+<div class="light hidden" id="light"><button id="close">×</button><img id="lightImg" alt=""><div id="lightCap" style="color:#fff;position:fixed;bottom:20px"></div></div>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script type="module">
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/controls/OrbitControls.js";
+
+const $=id=>document.getElementById(id);
+const state={assembly:null,stage:0,anim:null,auto:false,exploded:false,uploads:[],models:[]};
+let scene,camera,renderer,controls,root;
+const nodes=new Map();
+
+const RULES=[
+{r:/frame base|base/i,k:"frame-base",c:0x5c5849},{r:/frame gasket.*cathode|cathode.*gasket/i,k:"main-gasket",c:0xf28c28},
+{r:/manifold.*gasket|gasket.*manifold/i,k:"manifold-gasket",c:0xffa447},{r:/frame cover|cover/i,k:"frame-cover",c:0x8f1f16},
+{r:/gear/i,k:"gear",c:0x69737c},{r:/shaft/i,k:"shaft",c:0x89939d},{r:/washer/i,k:"washer",c:0xbfc7cf},
+{r:/circlip|clip/i,k:"clip",c:0x4e5964},{r:/carrier/i,k:"carrier",c:0x59616b}
+];
+const classify=n=>RULES.find(x=>x.r.test(n||""))||{k:"generic",c:0x627180};
+
+function init(){
+ const v=$("viewer");scene=new THREE.Scene();scene.background=new THREE.Color(0xdfe6ed);
+ camera=new THREE.PerspectiveCamera(38,1,.1,5000);camera.up.set(0,0,1);camera.position.set(560,-700,430);
+ renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.shadowMap.enabled=true;v.appendChild(renderer.domElement);
+ controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.enablePan=false;controls.minDistance=250;controls.maxDistance=2400;controls.target.set(0,0,30);
+ scene.add(new THREE.HemisphereLight(0xf4f7fb,0x29323b,1.2));const d=new THREE.DirectionalLight(0xffffff,1.5);d.position.set(400,-400,700);d.castShadow=true;scene.add(d);
+ const floor=new THREE.Mesh(new THREE.PlaneGeometry(2600,1600),new THREE.MeshStandardMaterial({color:0x9caab7,roughness:1}));floor.position.z=-18;floor.receiveShadow=true;scene.add(floor);
+ root=new THREE.Group();scene.add(root);resize();addEventListener("resize",resize);requestAnimationFrame(loop)
+}
+function resize(){const v=$("viewer"),w=v.clientWidth||700,h=v.clientHeight||500;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+function loop(now){requestAnimationFrame(loop);if(state.anim){const t=Math.min(1,(now-state.anim.t)/(state.anim.d||900));applyAnimation(state.anim.i,t);if(t>=1){state.stage=state.anim.to;state.anim=null;render()}}updateExplode();controls.update();renderer.render(scene,camera)}
+function makePart(part){
+ const g=new THREE.Group(), info=classify(part.name);const mat=new THREE.MeshStandardMaterial({color:part.color||info.c,roughness:.52,metalness:.18});
+ let mesh;switch(part.kind||info.k){
+ case"frame-base":mesh=new THREE.Mesh(new THREE.BoxGeometry(520,360,46),mat);break;
+ case"frame-cover":mesh=new THREE.Mesh(new THREE.BoxGeometry(500,340,34),mat);break;
+ case"main-gasket":mesh=new THREE.Mesh(new THREE.TorusGeometry(145,15,18,64),mat);mesh.scale.set(1.45,.72,1);break;
+ case"manifold-gasket":mesh=new THREE.Mesh(new THREE.CylinderGeometry(42,42,12,48),mat);mesh.scale.x=1.25;break;
+ case"gear":mesh=gear(78,28,24,mat);break;
+ case"shaft":mesh=new THREE.Mesh(new THREE.CylinderGeometry(28,28,180,40),mat);mesh.rotation.y=Math.PI/2;break;
+ case"washer":mesh=new THREE.Mesh(new THREE.TorusGeometry(48,10,14,40),mat);break;
+ case"clip":mesh=new THREE.Mesh(new THREE.TorusGeometry(55,7,12,40,Math.PI*1.65),mat);break;
+ case"carrier":mesh=new THREE.Mesh(new THREE.BoxGeometry(240,170,32),mat);break;
+ default:mesh=new THREE.Mesh(new THREE.BoxGeometry(180,120,36),mat);
+ }
+ mesh.castShadow=true;mesh.receiveShadow=true;g.add(mesh);
+ const label=new THREE.Sprite(new THREE.SpriteMaterial({map:labelTexture(part.name),transparent:true,depthTest:false}));label.scale.set(160,32,1);label.position.set(0,0,70);label.visible=false;g.add(label);
+ return {root:g,mesh,label,rest:new THREE.Vector3()}
+}
+function gear(outer,tooth,teeth,mat){const s=new THREE.Shape();for(let i=0;i<teeth*2;i++){const a=i*Math.PI/teeth,r=i%2?outer-tooth:outer;s.lineTo(Math.cos(a)*r,Math.sin(a)*r)}s.closePath();const geo=new THREE.ExtrudeGeometry(s,{depth:tooth,bevelEnabled:false});geo.center();return new THREE.Mesh(geo,mat)}
+function labelTexture(text){const c=document.createElement("canvas");c.width=600;c.height=110;const x=c.getContext("2d");x.fillStyle="rgba(15,23,32,.8)";if(x.roundRect)x.roundRect(5,5,590,100,18);else x.fillRect(5,5,590,100);x.fill();x.fillStyle="#fff";x.font="bold 34px system-ui";x.textAlign="center";x.textBaseline="middle";x.fillText(String(text).slice(0,24),300,57);return new THREE.CanvasTexture(c)}
+
+function buildScene(){while(root.children.length)root.remove(root.children[0]);nodes.clear();const p=state.assembly?.parts||[];p.forEach((part,i)=>{const n=makePart(part);n.root.position.copy(restPosition(part,i,p.length));n.rest.copy(n.root.position);nodes.set(part.id,n)});applyStage(state.stage)}
+function restPosition(part,i,total){const k=part.kind||classify(part.name).k;if(k==="frame-base")return new THREE.Vector3(0,0,25);if(k==="main-gasket")return new THREE.Vector3(0,0,82);if(k==="manifold-gasket")return new THREE.Vector3(part.id.endsWith("b")?155:-155,72,70);if(k==="frame-cover")return new THREE.Vector3(0,0,132);return new THREE.Vector3((i-total/2)*100,180+(i%2)*55,60)}
+function applyStage(stage){if(!state.assembly)return;for(const [id,n] of nodes){const idx=state.assembly.steps.findIndex(s=>s.partId===id||s.partIds?.includes(id));n.root.visible=true;n.root.position.copy(n.rest);n.label.visible=false;if(idx>=0&&stage<=idx)n.root.position.z+=240+idx*20}}
+function targets(step){let ids=[...(step.partIds||[])];if(!ids.length&&step.partId)ids=[step.partId];return ids.map(id=>nodes.get(id)).filter(Boolean)}
+function applyAnimation(i,t){const s=state.assembly.steps[i],e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;if(!s){applyStage(state.stage);return}if(s.action==="MOVE"){root.position.x=520*e;return}root.position.x=0;targets(s).forEach(n=>{const start=n.rest.clone();start.z+=240+i*20;n.root.position.lerpVectors(start,n.rest,e);n.label.visible=t>.15&&t<.9})}
+function updateExplode(){const f=state.exploded?1:0;for(const [id,n] of nodes){const i=[...nodes.keys()].indexOf(id);const p=n.root.position;p.z=p.z*(1-f)+(n.rest.z+(i+1)*75)*f}}
+function setStage(stage,animate=true){stage=Math.max(0,Math.min(stage,state.assembly.steps.length));if(!animate){state.stage=stage;state.anim=null;applyStage(stage);render();return}if(stage===state.stage)return;const i=stage-1;if(i<0){setStage(0,false);return}state.anim={i,to:stage,t:performance.now(),d:state.assembly.steps[i].duration||1000}}
+function autoPlay(){state.auto=!state.auto;$("auto").textContent=state.auto?"Stop auto play":"Auto play";if(state.auto&&state.stage>=state.assembly.steps.length)setStage(0,false);if(state.auto)tick()}
+function tick(){if(!state.auto)return;if(state.stage>=state.assembly.steps.length){state.auto=false;$("auto").textContent="Auto play";return}setStage(state.stage+1,true);setTimeout(tick,(state.assembly.steps[state.stage]?.duration||1100)+350)}
+function render(){const a=state.assembly;if(!a)return;const steps=a.steps||[],current=steps[Math.max(0,state.stage-1)]||null;$("title").textContent=a.project?.name||"Assembly review";$("badge").textContent=a.project?.name||"Loaded";$("source").textContent=state.models.length?"Uploaded models available":"Approximate geometry";$("progress").textContent=state.stage+" / "+steps.length;$("count").textContent=steps.length+" step"+(steps.length===1?"":"s");$("parts").textContent=a.parts.length;$("refCount").textContent=a.references.length;$("modelSource").textContent=state.models.length?state.models.length+" uploaded file(s)":"Procedural approximation";$("steps").innerHTML="";steps.forEach((s,i)=>{const b=document.createElement("button");b.className="step "+(state.stage>i?"done ":"")+(state.stage===i+1?"active":"");b.innerHTML='<span class="num">'+s.number+'</span><span><strong>'+esc(s.name)+'</strong><span>'+esc(s.instruction)+'</span></span>';b.onclick=()=>setStage(i+1,false);$("steps").appendChild(b)});$("detailTitle").textContent=current?.name||"Ready";$("detailText").textContent=current?.instruction||"Press Assemble next to start.";$("chips").innerHTML="";if(current){chip("Action: "+current.action);if(current.partId){const p=a.parts.find(x=>x.id===current.partId);if(p)chip(p.name+" · "+(p.partNumber||"no part number"))}if(current.quantity)chip("Qty: "+current.quantity);if(current.tool)chip("Tool: "+current.tool)}$("refs").innerHTML="";(current?.references||a.references.slice(0,4).map(x=>x.id)).map(id=>a.references.find(r=>r.id===id)).filter(Boolean).forEach(r=>{const b=document.createElement("button");b.className="ref";b.innerHTML='<img src="'+r.src+'" alt="'+esc(r.label)+'"><span>'+esc(r.label)+'</span>';b.onclick=()=>openLight(r.src,r.label);$("refs").appendChild(b)});applyStage(state.stage)}
+function chip(t){const s=document.createElement("span");s.className="chip";s.textContent=t;$("chips").appendChild(s)}
+function esc(t){return String(t??"").replace(/[&<>"]/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[x]))}
+function readImage(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res({id:"upload-"+Date.now()+"-"+Math.random(),label:f.name,src:r.result});r.onerror=rej;r.readAsDataURL(f)})}
+function normalize(raw,name){const refs=(raw.references||[]).map((r,i)=>({id:r.id||"ref-"+(i+1),label:r.label||r.name||"Reference "+(i+1),src:r.src}));const parts=(raw.parts||[]).map((p,i)=>{const info=classify(p.name||p.partName||p.kind);return{id:p.id||"part-"+(i+1),name:p.name||p.partName||info.k,partNumber:String(p.partNumber??""),quantity:Number(p.quantity||p.qty||1),kind:p.kind||info.k,color:p.color||info.c}});const steps=(raw.steps||[]).map((s,i)=>({id:s.id||"step-"+(i+1),number:Number(s.number||i+1),name:s.name||"Step "+(i+1),instruction:s.instruction||s.text||s.name||"",action:s.action||infer(s.instruction||s.text||s.name||""),partId:s.partId||null,partIds:s.partIds||[],quantity:Number(s.quantity||1),tool:s.tool||"",references:s.references||[],duration:Number(s.duration||1000)}));return{version:"0.1",project:{name:raw.projectName||name||"Generated assembly"},parts,references:refs,steps,review:{status:"requires-human-review",modelAccuracy:"approximate"}}}
+function infer(t){t=String(t).toLowerCase();if(/scan|qr|barcode/.test(t))return"SCAN";if(/move|next station/.test(t))return"MOVE";if(/stick|placard|label/.test(t))return"LABEL";if(/pick|place|insert|fit|put|load/.test(t))return"PLACE";return"NOTE"}
+function demoAssembly(){return normalize({projectName:"Hydep Frame Sub-Assembly · Station-01",parts:[{id:"base",name:"Frame Base",partNumber:"S110AW-MDG-405",quantity:1},{id:"gasket",name:"Frame Gasket Cathode",partNumber:"S110AW-MDG-602",quantity:1},{id:"manifold-a",name:"Manifold Gasket A",partNumber:"S110AW-MDG-615",quantity:1},{id:"manifold-b",name:"Manifold Gasket B",partNumber:"S110AW-MDG-615",quantity:1},{id:"cover",name:"Frame Cover",partNumber:"S110AW-MDG-407",quantity:1}],references:[{id:"base",label:"Frame base reference",src:"./assets/hydep/base.svg"},{id:"gasket",label:"Gasket reference",src:"./assets/hydep/gasket.svg"},{id:"manifold",label:"Manifold gasket reference",src:"./assets/hydep/manifold.svg"},{id:"cover",label:"Cover reference",src:"./assets/hydep/cover.svg"},{id:"exploded",label:"Exploded view reference",src:"./assets/hydep/exploded.svg"}],steps:[{number:1,name:"Load frame base",instruction:"Pick and load the Frame Base on the fixture with the help of the manipulator.",action:"PLACE",partId:"base",quantity:1,references:["base"],tool:"Manipulator / gripper"},{number:2,name:"Scan QR code",instruction:"Scan the QR Code with the hand-held scanner.",action:"SCAN",references:["base"]},{number:3,name:"Place frame gasket",instruction:"Pick the Frame Gasket Cathode and place it on the frame base.",action:"PLACE",partId:"gasket",quantity:1,references:["gasket"]},{number:4,name:"Place manifold gaskets",instruction:"Pick the manifold gasket and place it on the frame base.",action:"PLACE",partId:"manifold-a",partIds:["manifold-a","manifold-b"],quantity:2,references:["manifold"]},{number:5,name:"Place frame cover",instruction:"Pick the Frame Cover and place it on the frame base.",action:"PLACE",partId:"cover",quantity:1,references:["cover"]},{number:6,name:"Move barcode to placard",instruction:"Remove the Bar Code from the Frame Cover and stick it on the placard.",action:"LABEL",references:["cover"]},{number:7,name:"Move to next station",instruction:"Movement to next station.",action:"MOVE",references:["exploded"]}]}, "Hydep demo")}
+async function loadDemo(){state.models=[];state.uploads=[];state.assembly=demoAssembly();state.stage=0;state.auto=false;state.exploded=false;buildScene();render();$("sheetName").textContent="Built-in Hydep demo";$("photoName").textContent="Built-in reference set";$("modelName").textContent="No CAD uploaded";$("analyzeStatus").textContent="Hydep demo loaded"}
+async function analyze(){const f=$("sheet").files?.[0];if(!f){$("analyzeStatus").textContent="Choose an Excel / CSV / JSON file first.";return}try{$("analyzeStatus").textContent="Reading…";let raw;if(f.name.toLowerCase().endsWith(".json"))raw=JSON.parse(await f.text());else{const wb=XLSX.read(await f.arrayBuffer(),{type:"array"});raw=parseWorkbook(wb)}if(state.uploads.length)raw.references=[...(raw.references||[]),...state.uploads];state.assembly=normalize(raw,f.name);mapUploadedRefs();state.stage=0;buildScene();render();$("analyzeStatus").textContent="Built "+state.assembly.steps.length+" steps."}catch(e){console.error(e);$("analyzeStatus").textContent="Analysis failed: "+e.message}}
+function parseWorkbook(wb){const steps=[],parts=[];for(const name of wb.SheetNames){const rows=XLSX.utils.sheet_to_json(wb.Sheets[name],{header:1,defval:""});for(let r=0;r<rows.length;r++){const row=rows[r]||[],a=String(row[0]??"").trim(),b=String(row[1]??"").trim();if(/^\d+$/.test(a)&&b.length>8)steps.push({number:+a,name:"Step "+a,instruction:b});const joined=row.map(x=>String(x??"")).join(" | ");if(/BOM|Part\s*#/i.test(joined)&&/Qty|Q'ty/i.test(joined)){for(let j=r+1;j<Math.min(r+10,rows.length);j++){const rr=rows[j]||[],pn=String(rr[3]??"").trim(),qty=parseFloat(String(rr[2]??"").replace(/[^0-9.]/g,""))||1,nm=String(rr[1]??"").trim();if(pn)parts.push({name:nm||("Part "+pn),partNumber:pn,quantity:qty})}}}}return{projectName:wb.SheetNames[0]||"Generated assembly",steps,parts,references:[]}}
+function mapUploadedRefs(){if(!state.assembly||!state.uploads.length)return;state.assembly.references=state.uploads;state.assembly.steps.forEach((s,i)=>{s.references=[state.uploads[i%state.uploads.length].id]})}
+function exportJson(){if(!state.assembly)return;const b=new Blob([JSON.stringify(state.assembly,null,2)],{type:"application/json"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download="assembly.json";a.click();URL.revokeObjectURL(u)}
+function openLight(src,cap){$("lightImg").src=src;$("lightCap").textContent=cap;$("light").classList.remove("hidden")}
+$("close").onclick=()=>$("light").classList.add("hidden");$("light").onclick=e=>{if(e.target.id==="light")e.currentTarget.classList.add("hidden")};$("demo").onclick=loadDemo;$("export").onclick=exportJson;$("analyze").onclick=analyze;$("next").onclick=()=>setStage(state.stage+1,true);$("prev").onclick=()=>setStage(Math.max(0,state.stage-1),false);$("reset").onclick=()=>{state.auto=false;state.exploded=false;$("auto").textContent="Auto play";$("explode").textContent="Exploded view";setStage(0,false)};$("auto").onclick=autoPlay;$("explode").onclick=()=>{state.exploded=!state.exploded;$("explode").textContent=state.exploded?"Collapse view":"Exploded view"};$("sheet").onchange=e=>$("sheetName").textContent=e.target.files?.[0]?.name||"Choose a file";$("models").onchange=e=>{state.models=[...e.target.files];$("modelName").textContent=state.models.length+" model file(s) selected"};$("photos").onchange=async e=>{state.uploads=await Promise.all([...e.target.files].map(readImage));$("photoName").textContent=state.uploads.length+" photo(s) selected"};
+init();loadDemo();
+</script>
+</body>
+</html>
