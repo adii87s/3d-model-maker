@@ -1,27 +1,40 @@
 # 3D Assembly Maker
 
-A browser-based foundation for turning assembly documents and product reference photos into a step-by-step animated 3D assembly review.
+A working foundation for the software you described: upload an assembly document, step/product photographs, and optional STEP/STP/GLB models, then build a reviewable animated 3D assembly.
 
-## Current MVP
-- Three.js interactive 3D viewer
-- Hydep 7-step demonstration
-- Assembly step timeline
-- PLACE / SCAN / LABEL / MOVE actions
-- Multiple-part quantity handling
-- Previous / Assemble Next / Auto Play / Exploded View / Reset
-- Upload JSON or Excel/CSV assembly sheets
-- Upload multiple reference photos
-- Export the generated assembly definition as JSON
-- Procedural approximate 3D geometry from part names
+## Current build
+
+- Excel / XLS / CSV / JSON assembly data
+- Multiple step/product photographs with manual step mapping
+- STEP / STP CAD conversion to GLB using CadQuery/OpenCascade
+- GLB / GLTF loading
+- Assembly procedure and BOM extraction
+- Step-to-part mapping using names, part numbers and part-type rules
+- PLACE, SCAN, LABEL, MOVE and INSPECT action detection
+- Three.js orbit/zoom, step animation and exploded view
+- Current-step reference images and assembly.json export
+- Human review before accepting the generated assembly
+
+## Accuracy
+
+STEP/STP is treated as the exact geometry source when available. Photo-only 3D is currently an approximate silhouette extrusion and does not reconstruct hidden surfaces or engineering dimensions from one photograph.
 
 ## Run locally
-python -m http.server 5173
-Open http://localhost:5173
 
-## Architecture target
-DOCUMENT -> STEP EXTRACTION -> PART DATABASE -> MODEL DATABASE -> ASSEMBLY RELATIONSHIPS -> ANIMATION PLAN -> THREE.JS RENDERER
+```bash
+python -m pip install -r requirements.txt
+python start.py
+```
 
-## Planned engineering layer
-FastAPI backend, AI document/vision analyzer, PostgreSQL storage, GLB/GLTF/STEP ingestion, AI-assisted part recognition and placement/orientation, and human review before final generation.
+Open http://127.0.0.1:8000
 
-Exact engineering geometry should come from validated CAD/GLB or a validated reconstruction pipeline; the browser MVP labels its generated geometry as approximate.
+Backend endpoints:
+- GET /api/health
+- POST /api/convert-step
+- POST /api/photo-to-3d
+
+## Target pipeline
+
+DOCUMENT -> STEP/BOM EXTRACTION -> PART DATABASE -> CAD/PHOTO MODEL DATABASE -> STEP/PART/REFERENCE MAPPING -> ASSEMBLY DEFINITION -> ANIMATION PLAN -> THREE.JS REVIEWER
+
+The next engineering layer is stronger multi-view image reconstruction and automatic placement/orientation inference without replacing the assembly-definition layer.
