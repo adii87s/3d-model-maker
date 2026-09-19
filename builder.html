@@ -5,78 +5,65 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>3D Assembly Maker</title>
 <style>
-:root{--bg:#eef3f7;--panel:#fff;--card:#f6f8fa;--text:#17212b;--muted:#667685;--line:#d3dce4;--blue:#1769b1;--blue2:#e6f1fb;--danger:#b42318;--good:#137333}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Arial,sans-serif}
-button,input,textarea,select{font:inherit}.app{max-width:1500px;margin:0 auto;padding:18px}.top{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:14px}.ey{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--blue)}h1{margin:3px 0;font-size:30px}h2{margin:4px 0 10px}.sub{margin:0;color:var(--muted);max-width:980px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:14px}.col{display:flex;flex-direction:column;gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:15px}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 13px;font-weight:700;cursor:pointer}.btn:hover{border-color:var(--blue)}.primary{background:var(--blue);border-color:var(--blue);color:#fff}.danger{color:var(--danger)}.field{display:flex;flex-direction:column;gap:5px}.field label{font-weight:700;font-size:12px}.field input,.field textarea,.field select{border:1px solid var(--line);border-radius:9px;padding:10px 11px;background:#fff}.field textarea{min-height:90px;resize:vertical}.projectgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stepform{display:grid;grid-template-columns:1fr 1fr;gap:10px}.wide{grid-column:1/-1}.filebox{border:1px dashed #aebdca;background:var(--card);border-radius:11px;padding:12px}.filebox input{width:100%}.preview{display:flex;gap:10px;align-items:center;margin-top:8px}.preview img{width:82px;height:62px;object-fit:cover;border-radius:8px;border:1px solid var(--line);background:#fff}.small{font-size:12px;color:var(--muted)}.steps{display:flex;flex-direction:column;gap:7px;max-height:470px;overflow:auto}.stepitem{display:grid;grid-template-columns:34px 1fr auto;gap:9px;align-items:start;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px}.stepitem.active{border-color:var(--blue);background:var(--blue2)}.num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);font-weight:800;color:var(--blue)}.stepitem strong{display:block}.stepitem p{margin:3px 0 0;color:var(--muted);font-size:12px}.thumb{width:70px;height:52px;object-fit:cover;border-radius:7px;border:1px solid var(--line)}.viewer{height:600px;border-radius:12px;overflow:hidden;background:#dfe7ee;border:1px solid var(--line)}.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.chips{display:flex;gap:6px;flex-wrap:wrap}.chip{padding:4px 9px;background:var(--card);border:1px solid var(--line);border-radius:999px;font-size:12px}.status{font-size:12px;color:var(--muted)}.status.good{color:var(--good)}.status.bad{color:var(--danger)}.notice{font-size:12px;color:#71520a;background:#fff8df;border:1px solid #e3c36a;border-radius:9px;padding:9px;margin-top:9px}.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.gallery img{width:100%;height:100px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}.library{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto}.projectcard{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px}.projectcard .meta{font-size:12px;color:var(--muted);margin:3px 0 7px}.projectcard .actions{display:flex;gap:6px;flex-wrap:wrap}.projectcard .actions .btn{padding:7px 9px;font-size:12px}.empty{font-size:12px;color:var(--muted);padding:8px}@media(max-width:1050px){.layout{grid-template-columns:1fr}.projectgrid,.stepform{grid-template-columns:1fr}.viewer{height:500px}}
+:root{
+  --bg:#eef3f7;--panel:#fff;--card:#f6f8fa;--text:#17212b;--muted:#667685;
+  --line:#d3dce4;--blue:#1769b1;--blue2:#e6f1fb;--danger:#b42318;--good:#137333;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:1500px;margin:0 auto;padding:18px}
+.top{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:14px}
+.ey{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--blue)}
+h1{margin:3px 0;font-size:30px}h2{margin:4px 0 10px}
+.sub{margin:0;color:var(--muted);max-width:980px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:14px}
+.col{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:15px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 13px;font-weight:700}
+.btn:hover{border-color:var(--blue)}
+.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.danger{color:var(--danger)}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-weight:700;font-size:12px}
+.field input,.field textarea,.field select{border:1px solid var(--line);border-radius:9px;padding:10px 11px;background:#fff}
+.field textarea{min-height:90px;resize:vertical}
+.projectgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stepform{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wide{grid-column:1/-1}
+.filebox{border:1px dashed #aebdca;background:var(--card);border-radius:11px;padding:12px}
+.filebox input{width:100%}
+.preview{display:flex;gap:10px;align-items:center;margin-top:8px}
+.preview img{width:82px;height:62px;object-fit:cover;border-radius:8px;border:1px solid var(--line);background:#fff}
+.small{font-size:12px;color:var(--muted)}
+.steps{display:flex;flex-direction:column;gap:7px;max-height:520px;overflow:auto}
+.stepitem{display:grid;grid-template-columns:34px 1fr auto;gap:9px;align-items:start;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px}
+.stepitem.active{border-color:var(--blue);background:var(--blue2)}
+.num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);font-weight:800;color:var(--blue)}
+.stepitem strong{display:block}.stepitem p{margin:3px 0 0;color:var(--muted);font-size:12px}
+.thumb{width:70px;height:52px;object-fit:cover;border-radius:7px;border:1px solid var(--line)}
+.viewer{height:600px;border-radius:12px;overflow:hidden;background:#dfe7ee;border:1px solid var(--line)}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:4px 9px;background:var(--card);border:1px solid var(--line);border-radius:999px;font-size:12px}
+.status{font-size:12px;color:var(--muted)}.status.good{color:var(--good)}.status.bad{color:var(--danger)}
+.notice{font-size:12px;color:#71520a;background:#fff8df;border:1px solid #e3c36a;border-radius:9px;padding:9px;margin-top:9px}
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.gallery img{width:100%;height:110px;object-fit:contain;border-radius:8px;border:1px solid var(--line);background:#fff}
+.library{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto}
+.projectcard{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px}
+.projectcard.demo{border-color:#8ab7de;background:#eef7ff}
+.projectcard .meta{font-size:12px;color:var(--muted);margin:4px 0 8px}
+.projectcard .actions{display:flex;gap:6px;flex-wrap:wrap}
+.projectcard .actions .btn{padding:7px 9px;font-size:12px}
+.empty{font-size:12px;color:var(--muted);padding:8px}
+.boot{display:none;margin:0 18px 12px;padding:12px;border:1px solid #e3a8a8;background:#fff1f1;color:#8d1f1f;border-radius:10px;font-weight:700}
+.hero-demo{padding:12px;border:1px solid #8ab7de;background:#eef7ff;border-radius:11px;margin-bottom:10px}
+.hero-demo strong{display:block;margin-bottom:3px}
+@media(max-width:1050px){.layout{grid-template-columns:1fr}.projectgrid,.stepform{grid-template-columns:1fr}.viewer{height:500px}}
 </style>
-</head>
-<body>
-<script>
-window.addEventListener("error",function(e){
- const box=document.getElementById("bootError");
- if(box){box.style.display="block";box.textContent="Application error: "+(e.message||"Unknown JavaScript error");}
-});
-window.addEventListener("unhandledrejection",function(e){
- const box=document.getElementById("bootError");
- if(box){box.style.display="block";box.textContent="Application error: "+(e.reason?.message||e.reason||"Unhandled promise rejection");}
-});
-</script>
-<div id="bootError" style="display:none;margin:12px 18px;padding:12px;border:1px solid #e3a8a8;background:#fff1f1;color:#8d1f1f;border-radius:10px;font-weight:700"></div>
-<div class="app">
-<header class="top">
-<div><div class="ey">ASSEMBLY INTELLIGENCE</div><h1>3D Assembly Maker</h1><p class="sub">Create an assembly manually: define each step, explain what happens, attach the photo for that step, and optionally provide a STEP/STP model. The software turns those inputs into an animated 3D assembly.</p></div>
-<div class="controls" style="margin:0"><button class="btn" id="loadDemo">Open Hydep demo</button><button class="btn primary" id="exportBtn">Export assembly.json</button></div>
-</header>
-
-<div class="layout">
-<div class="col">
-<section class="card">
-<div class="row"><div><div class="ey">1 · PROJECT</div><h2>Project setup</h2></div><span class="chip" id="projectStatus">New project</span></div>
-<div class="projectgrid">
-<div class="field"><label>Project name</label><input id="projectName" placeholder="e.g. Gearbox Assembly"></div>
-<div class="field"><label>3D source</label><select id="sourceMode"><option value="cad">STEP / STP CAD</option><option value="photo">Photo-based approximation</option><option value="mixed">CAD + photo references</option></select></div>
-</div>
-<div class="filebox" style="margin-top:10px"><b>Optional STEP / STP / GLB</b><div class="small">Add the assembly model here. STEP/STP is converted by the backend into web-ready GLB.</div><input id="modelFile" type="file" accept=".step,.stp,.glb,.gltf"></div>
-</section>
-
-<section class="card">
-<div class="ey">2 · CREATE STEPS</div>
-<h2>Add assembly step</h2>
-<div class="stepform">
-<div class="field"><label>Step name</label><input id="stepName" placeholder="e.g. Place Frame Gasket"></div>
-<div class="field"><label>Action</label><select id="stepAction"><option>PLACE</option><option>SCAN</option><option>LABEL</option><option>INSPECT</option><option>MOVE</option><option>NOTE</option></select></div>
-<div class="field wide"><label>Explain the step</label><textarea id="stepText" placeholder="Explain exactly what the worker does, where the part goes, and any important instruction."></textarea></div>
-<div class="field"><label>Part / component name</label><input id="partName" placeholder="e.g. Frame Cover"></div>
-<div class="field"><label>Quantity</label><input id="qty" type="number" min="1" value="1"></div>
-<div class="field wide"><label>Photo for this step</label><div class="filebox"><input id="stepPhoto" type="file" accept="image/*"><div class="preview" id="photoPreview"><span class="small">No photo selected</span></div></div></div>
-</div>
-<div class="controls"><button class="btn primary" id="addStep">+ Add step</button><button class="btn" id="clearStep">Clear</button><span class="status" id="stepStatus">0 steps created</span></div>
-</section>
-
-<section class="card">
-<div class="ey">3 · BUILD</div>
-<div class="row"><div><h2>Generate 3D assembly</h2><div class="status" id="buildStatus">Create at least one step.</div></div><button class="btn primary" id="buildBtn">Build 3D</button></div>
-<div class="notice">CAD gives the real model geometry. A photo-only step can generate an approximate silhouette model; it is not engineering-accurate hidden geometry.</div>
-</section>
-
-<section class="card">
-<div class="row"><div><div class="ey">4 · 3D REVIEW</div><h2 id="sceneTitle">No assembly yet</h2></div><div class="chips"><span class="chip" id="sceneMode">Waiting</span><span class="chip" id="sceneProgress">0 / 0</span></div></div>
-<div class="viewer" id="viewer"></div>
-<div class="controls">
-<button class="btn" id="prevBtn">← Previous</button><button class="btn primary" id="nextBtn">▶ Assemble next</button><button class="btn" id="autoBtn">Auto play</button><button class="btn" id="explodeBtn">Exploded view</button><button class="btn" id="resetBtn">Reset</button>
-</div>
-</section>
-</div>
-
-<aside class="col">
-<section class="card"><div class="row"><div><div class="ey">PROJECT LIBRARY</div><h2>Saved assemblies</h2></div><span class="chip" id="projectCount">0</span></div><div class="controls"><button class="btn primary" id="saveProjectBtn">Save current</button><button class="btn" id="refreshProjectsBtn">Refresh</button></div><div class="library" id="projectLibrary"><div class="empty">No saved assemblies yet.</div></div></section>
-<section class="card"><div class="row"><div><div class="ey">STEP LIST</div><h2>Your assembly</h2></div><span class="chip" id="stepCount">0</span></div><div class="steps" id="steps"></div></section>
-<section class="card"><div class="ey">CURRENT STEP</div><h2 id="currentTitle">Ready</h2><p class="sub" id="currentText">Add a step to begin.</p><div class="chips" id="currentChips"></div><div class="gallery" id="currentImage"></div></section>
-<section class="card"><div class="ey">SYSTEM STATUS</div><div class="row"><span>Backend</span><b id="backend">Checking…</b></div><div class="row" style="margin-top:7px"><span>CAD</span><b id="cadStatus">Not loaded</b></div><div class="row" style="margin-top:7px"><span>Photos</span><b id="photoStatus">0</b></div><div class="notice">The final assembly is always reviewable step-by-step before you treat it as an official work instruction.</div></section>
-</aside>
-</div>
-</div>
-
 <script type="importmap">
 {
   "imports": {
@@ -85,227 +72,729 @@ window.addEventListener("unhandledrejection",function(e){
   }
 }
 </script>
+</head>
+<body>
+<div id="bootError" class="boot"></div>
+<div class="app">
+<header class="top">
+  <div>
+    <div class="ey">ASSEMBLY INTELLIGENCE</div>
+    <h1>3D Assembly Maker</h1>
+    <p class="sub">Create an assembly manually: define each step, explain what happens, attach the reference photo, and optionally provide STEP/STP/GLB geometry. Saved assemblies stay in the local Project Library.</p>
+  </div>
+  <div class="controls" style="margin:0">
+    <button class="btn" id="loadDemo">Open demo</button>
+    <button class="btn primary" id="exportBtn">Export assembly.json</button>
+  </div>
+</header>
+
+<div class="layout">
+<div class="col">
+
+<section class="card">
+  <div class="hero-demo">
+    <strong>Built-in showcase demo</strong>
+    Hydep Frame Assembly is already included so you can demonstrate the software without uploading anything.
+  </div>
+  <div class="row">
+    <div><div class="ey">1 · PROJECT</div><h2>Project setup</h2></div>
+    <span class="chip" id="projectStatus">Demo ready</span>
+  </div>
+  <div class="projectgrid">
+    <div class="field"><label>Project name</label><input id="projectName" placeholder="e.g. Gearbox Assembly"></div>
+    <div class="field"><label>3D source</label><select id="sourceMode"><option value="cad">STEP / STP CAD</option><option value="photo">Photo-based approximation</option><option value="mixed">CAD + photo references</option></select></div>
+  </div>
+  <div class="filebox" style="margin-top:10px">
+    <b>Optional STEP / STP / GLB</b>
+    <div class="small">Upload real CAD/model geometry here. STEP/STP is converted by the backend into web-ready GLB.</div>
+    <input id="modelFile" type="file" accept=".step,.stp,.glb,.gltf">
+  </div>
+</section>
+
+<section class="card">
+  <div class="ey">2 · CREATE STEPS</div>
+  <h2>Add assembly step</h2>
+  <div class="stepform">
+    <div class="field"><label>Step name</label><input id="stepName" placeholder="e.g. Place Frame Gasket"></div>
+    <div class="field"><label>Action</label><select id="stepAction"><option>PLACE</option><option>SCAN</option><option>LABEL</option><option>INSPECT</option><option>MOVE</option><option>NOTE</option></select></div>
+    <div class="field wide"><label>Explain the step</label><textarea id="stepText" placeholder="Explain exactly what the worker does, where the part goes, and any important instruction."></textarea></div>
+    <div class="field"><label>Part / component name</label><input id="partName" placeholder="e.g. Frame Cover"></div>
+    <div class="field"><label>Quantity</label><input id="qty" type="number" min="1" value="1"></div>
+    <div class="field wide"><label>Photo for this step</label><div class="filebox"><input id="stepPhoto" type="file" accept="image/*"><div class="preview" id="photoPreview"><span class="small">No photo selected</span></div></div></div>
+  </div>
+  <div class="controls"><button class="btn primary" id="addStep">+ Add step</button><button class="btn" id="clearStep">Clear</button><button class="btn" id="newProjectBtn">New project</button><span class="status" id="stepStatus">Demo loaded</span></div>
+</section>
+
+<section class="card">
+  <div class="ey">3 · BUILD</div>
+  <div class="row"><div><h2>Generate 3D assembly</h2><div class="status" id="buildStatus">Demo 3D assembly is ready.</div></div><button class="btn primary" id="buildBtn">Build 3D</button></div>
+  <div class="notice">CAD is used when supplied. Photo-only reconstruction is an approximate visual mesh, not engineering CAD.</div>
+</section>
+
+<section class="card">
+  <div class="row"><div><div class="ey">4 · 3D REVIEW</div><h2 id="sceneTitle">Hydep Frame Assembly — 3D Demo</h2></div><div class="chips"><span class="chip" id="sceneMode">Built-in demo</span><span class="chip" id="sceneProgress">0 / 7</span></div></div>
+  <div class="viewer" id="viewer"></div>
+  <div class="controls">
+    <button class="btn" id="prevBtn">← Previous</button>
+    <button class="btn primary" id="nextBtn">▶ Assemble next</button>
+    <button class="btn" id="autoBtn">Auto play</button>
+    <button class="btn" id="explodeBtn">Exploded view</button>
+    <button class="btn" id="resetBtn">Reset</button>
+  </div>
+</section>
+
+</div>
+
+<aside class="col">
+<section class="card">
+  <div class="row"><div><div class="ey">PROJECT LIBRARY</div><h2>Saved assemblies</h2></div><span class="chip" id="projectCount">1</span></div>
+  <div class="controls"><button class="btn primary" id="saveProjectBtn">Save current</button><button class="btn" id="refreshProjectsBtn">Refresh</button></div>
+  <div class="library" id="projectLibrary">
+    <div class="projectcard demo">
+      <strong>Hydep Frame Assembly — 3D Demo <span class="chip">DEMO · 3D READY</span></strong>
+      <div class="meta">7 assembly steps · Built-in 3D model</div>
+      <div class="actions"><button class="btn primary" onclick="window.openHydepDemo&&window.openHydepDemo()">Open & Play Demo</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <div class="row"><div><div class="ey">STEP LIST</div><h2>Your assembly</h2></div><span class="chip" id="stepCount">7</span></div>
+  <div class="steps" id="steps"></div>
+</section>
+
+<section class="card">
+  <div class="ey">CURRENT STEP</div>
+  <h2 id="currentTitle">Pick & load Frame Base</h2>
+  <p class="sub" id="currentText">Pick and load the Frame Base on the fixture with the help of the manipulator.</p>
+  <div class="chips" id="currentChips"></div>
+  <div class="gallery" id="currentImage"></div>
+</section>
+
+<section class="card">
+  <div class="ey">SYSTEM STATUS</div>
+  <div class="row"><span>Backend</span><b id="backend">Checking…</b></div>
+  <div class="row" style="margin-top:7px"><span>CAD</span><b id="cadStatus">Not loaded</b></div>
+  <div class="row" style="margin-top:7px"><span>Photos</span><b id="photoStatus">0</b></div>
+  <div class="notice">The demo is built into the application. Your own projects are saved locally by the FastAPI backend.</div>
+</section>
+</aside>
+</div>
+</div>
+
 <script type="module">
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-(function(){
-"use strict";
 const $=id=>document.getElementById(id);
 const API="http://127.0.0.1:8000";
-const state={projectName:"",steps:[],stage:0,modelFile:null,photoCount:0,layers:[],root:null,scene:null,camera:null,renderer:null,controls:null,loader:null,anim:null,auto:false,explode:false,savedProjects:[{id:"demo-hydep-frame",name:"Hydep Frame Sub-Assembly — 3D Demo",demo:true,updatedAt:"2026-09-19T00:00:00+00:00",stepCount:7,sourceMode:"photo",builtIn3D:"hydep-procedural"}]};
+
+const DEMO={
+  id:"demo-hydep-frame",
+  name:"Hydep Frame Assembly — 3D Demo",
+  sourceMode:"photo",
+  demo:true,
+  steps:[
+    {number:1,name:"Pick & load Frame Base",instruction:"Pick and load the Frame Base on the fixture with the help of the manipulator.",action:"PLACE",partName:"Frame Base",quantity:1,reference:"/assets/hydep/base.svg"},
+    {number:2,name:"Scan QR Code",instruction:"Scan the QR Code with the hand-held scanner.",action:"SCAN",partName:"Frame Base",quantity:1,reference:"/assets/hydep/base.svg"},
+    {number:3,name:"Place Frame Gasket Cathode",instruction:"Pick the Frame Gasket Cathode and place it on the frame base.",action:"PLACE",partName:"Frame Gasket Cathode",quantity:1,reference:"/assets/hydep/gasket.svg"},
+    {number:4,name:"Place Manifold Gasket",instruction:"Pick the manifold gasket and place it on the frame base.",action:"PLACE",partName:"Manifold Gasket",quantity:2,reference:"/assets/hydep/manifold.svg"},
+    {number:5,name:"Place Frame Cover",instruction:"Pick the Frame Cover and place it on the frame base.",action:"PLACE",partName:"Frame Cover",quantity:1,reference:"/assets/hydep/cover.svg"},
+    {number:6,name:"Move barcode to placard",instruction:"Remove the Bar Code from the Frame Cover and stick it on the placard.",action:"LABEL",partName:"Frame Cover",quantity:1,reference:"/assets/hydep/cover.svg"},
+    {number:7,name:"Movement to next station",instruction:"Move the completed assembly to the next station.",action:"MOVE",partName:"Finished Assembly",quantity:1,reference:"/assets/hydep/exploded.svg"}
+  ]
+};
+
+const state={
+  steps:[],stage:0,projectName:"",sourceMode:"photo",loadedProjectId:null,modelFile:null,
+  layers:[],savedProjects:[],scene:null,camera:null,renderer:null,controls:null,loader:null,
+  root:null,animation:null,autoTimer:null,auto:false,explode:false
+};
+
+function showError(message){
+  const box=$("bootError"); box.style.display="block"; box.textContent=message;
+}
+window.addEventListener("error",e=>{if(e.message)showError("Application error: "+e.message)});
+window.addEventListener("unhandledrejection",e=>showError("Application error: "+(e.reason?.message||e.reason||"Promise rejected")));
+
+function cloneDemoSteps(){
+  return DEMO.steps.map(s=>({...s,photoFile:null,photoUrl:s.reference}));
+}
 
 function init3D(){
- const v=$("viewer");
- state.scene=new THREE.Scene(); state.scene.background=new THREE.Color(0xdfe7ee);
- state.camera=new THREE.PerspectiveCamera(38,1,.1,10000); state.camera.up.set(0,0,1); state.camera.position.set(650,-780,500);
- state.renderer=new THREE.WebGLRenderer({antialias:true}); state.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)); state.renderer.shadowMap.enabled=true; v.appendChild(state.renderer.domElement);
- state.controls=new OrbitControls(state.camera,state.renderer.domElement); state.controls.enableDamping=true; state.controls.enablePan=false;
- state.scene.add(new THREE.HemisphereLight(0xffffff,0x30404d,1.4)); const d=new THREE.DirectionalLight(0xffffff,1.8); d.position.set(450,-450,850); state.scene.add(d);
- const floor=new THREE.Mesh(new THREE.PlaneGeometry(4000,2600),new THREE.MeshStandardMaterial({color:0x9ba9b6,roughness:1})); floor.position.z=-20; floor.receiveShadow=true; state.scene.add(floor);
- state.root=new THREE.Group(); state.scene.add(state.root); state.loader=new GLTFLoader();
- resize(); window.addEventListener("resize",resize); requestAnimationFrame(loop);
+  const v=$("viewer");
+  try{
+    state.scene=new THREE.Scene();
+    state.scene.background=new THREE.Color(0xdfe7ee);
+    state.camera=new THREE.PerspectiveCamera(38,1,.1,10000);
+    state.camera.up.set(0,0,1);
+    state.camera.position.set(900,-1050,760);
+    state.renderer=new THREE.WebGLRenderer({antialias:true});
+    state.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+    state.renderer.shadowMap.enabled=true;
+    v.appendChild(state.renderer.domElement);
+    state.controls=new OrbitControls(state.camera,state.renderer.domElement);
+    state.controls.enableDamping=true;
+    state.controls.enablePan=true;
+    state.controls.minDistance=250;
+    state.controls.maxDistance=2600;
+    state.scene.add(new THREE.HemisphereLight(0xffffff,0x35424d,1.5));
+    const d=new THREE.DirectionalLight(0xffffff,1.9);
+    d.position.set(550,-600,1100);
+    d.castShadow=true;
+    state.scene.add(d);
+    const floor=new THREE.Mesh(new THREE.PlaneGeometry(4200,3000),new THREE.MeshStandardMaterial({color:0x9ba9b6,roughness:1}));
+    floor.position.z=-25; floor.receiveShadow=true; state.scene.add(floor);
+    state.root=new THREE.Group(); state.scene.add(state.root);
+    state.loader=new GLTFLoader();
+    resize();
+    window.addEventListener("resize",resize);
+    requestAnimationFrame(loop);
+  }catch(e){
+    showError("3D viewer could not start: "+e.message);
+    $("buildStatus").textContent="3D viewer failed to start.";
+  }
 }
-function resize(){const v=$("viewer"),w=v.clientWidth||900,h=v.clientHeight||600;state.renderer.setSize(w,h,false);state.camera.aspect=w/h;state.camera.updateProjectionMatrix()}
-function loop(now){requestAnimationFrame(loop);if(state.anim){const a=state.anim,p=Math.min(1,(now-a.t)/a.d),q=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;a.layers.forEach(l=>{l.object.position.lerpVectors(l.start,l.rest,q)});if(p>=1){state.anim=null;render()}}updateExplode();state.controls.update();state.renderer.render(state.scene,state.camera)}
-function updateExplode(){const f=state.explode?1:0;state.layers.forEach((l,i)=>{if(l.object.visible)l.object.position.z=l.rest.z+(i+1)*55*f})}
-function clear3D(){while(state.root.children.length){const o=state.root.children.pop();o.traverse(n=>{if(n.geometry)n.geometry.dispose();if(n.material){if(Array.isArray(n.material))n.material.forEach(m=>m.dispose());else n.material.dispose()}})}state.layers=[]}
-function restFor(index,total){return new THREE.Vector3((index-total/2)*110, index%2?35:-35, 40+index*22)}
-function addProceduralPart(step,index,total){ if(step.action!=="PLACE") return;
- const p=new THREE.Group(); const c=[0x5b574b,0xf28c28,0xffa447,0x8f1f16,0x69747d,0x8d969d][index%6];
- let m;
- const n=(step.partName||step.name).toLowerCase();
- const mat=new THREE.MeshStandardMaterial({color:c,roughness:.48,metalness:.18});
- if(/gasket/.test(n))m=new THREE.Mesh(new THREE.TorusGeometry(85,12,16,56),mat);
- else if(/cover/.test(n))m=new THREE.Mesh(new THREE.BoxGeometry(420,290,34),mat);
- else if(/base/.test(n))m=new THREE.Mesh(new THREE.BoxGeometry(450,320,48),mat);
- else if(/gear/.test(n))m=new THREE.Mesh(new THREE.CylinderGeometry(80,80,30,24),mat);
- else if(/shaft/.test(n))m=new THREE.Mesh(new THREE.CylinderGeometry(28,28,180,36),mat);
- else m=new THREE.Mesh(new THREE.BoxGeometry(170,120,40),mat);
- m.castShadow=true;m.receiveShadow=true;p.add(m);p.position.copy(restFor(index,total));state.root.add(p);const l={object:p,rest:p.position.clone(),step:step.number,kind:"photo"};p.position.z+=280+step.number*35;state.layers.push(l);
+
+function resize(){
+  if(!state.renderer)return;
+  const v=$("viewer"),w=v.clientWidth||900,h=v.clientHeight||600;
+  state.renderer.setSize(w,h,false);
+  state.camera.aspect=w/h;
+  state.camera.updateProjectionMatrix();
 }
+
+function loop(now){
+  requestAnimationFrame(loop);
+  if(state.animation){
+    const a=state.animation;
+    const p=Math.min(1,(now-a.time)/a.duration);
+    const q=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+    a.items.forEach(item=>item.object.position.lerpVectors(item.start,item.end,q));
+    if(p>=1){state.animation=null;render();}
+  }
+  if(state.root){
+    state.layers.forEach((l,i)=>{
+      if(l.object.visible&&!state.animation){
+        const e=state.explode?(i+1)*35:0;
+        l.object.position.x=l.base.x+(i%2?e:-e)*0.7;
+        l.object.position.y=l.base.y+(i%3?e*0.45:-e*0.45);
+        l.object.position.z=l.base.z+e;
+      }
+    });
+  }
+  state.controls?.update();
+  state.renderer?.render(state.scene,state.camera);
+}
+
+function clear3D(){
+  if(!state.root)return;
+  while(state.root.children.length){
+    const o=state.root.children.pop();
+    o.traverse(n=>{
+      if(n.geometry)n.geometry.dispose();
+      if(n.material){
+        if(Array.isArray(n.material))n.material.forEach(m=>m.dispose());
+        else n.material.dispose();
+      }
+    });
+  }
+  state.layers=[];
+}
+
+function material(color,metalness=.12){
+  return new THREE.MeshStandardMaterial({color,roughness:.42,metalness});
+}
+
+function ringGeometry(outer,inner,depth){
+  const shape=new THREE.Shape();
+  const hole=new THREE.Path();
+  const seg=64;
+  for(let i=0;i<=seg;i++){
+    const a=i/seg*Math.PI*2,x=Math.cos(a)*outer,y=Math.sin(a)*outer;
+    if(i===0)shape.moveTo(x,y);else shape.lineTo(x,y);
+  }
+  for(let i=seg;i>=0;i--){
+    const a=i/seg*Math.PI*2,x=Math.cos(a)*inner,y=Math.sin(a)*inner;
+    if(i===seg)hole.moveTo(x,y);else hole.lineTo(x,y);
+  }
+  shape.holes.push(hole);
+  return new THREE.ExtrudeGeometry(shape,{depth,bevelEnabled:true,bevelSegments:2,bevelSize:2,bevelThickness:2});
+}
+
+function makeBase(){
+  const g=new THREE.Group();
+  const m=material(0x5b574b,.28);
+  const plate=new THREE.Mesh(new THREE.BoxGeometry(620,410,55),m);
+  plate.castShadow=plate.receiveShadow=true; g.add(plate);
+  const top=new THREE.Mesh(new THREE.BoxGeometry(570,360,24),material(0x777264,.22));
+  top.position.z=39; top.castShadow=top.receiveShadow=true; g.add(top);
+  [[-250,-150],[250,-150],[-250,150],[250,150]].forEach(([x,y])=>{
+    const p=new THREE.Mesh(new THREE.CylinderGeometry(17,17,70,24),material(0x34383c,.55));
+    p.position.set(x,y,72);p.castShadow=true;g.add(p);
+  });
+  return g;
+}
+
+function makeMainGasket(){
+  const m=material(0xf28c28,.12);
+  const mesh=new THREE.Mesh(ringGeometry(245,192,18),m);
+  mesh.castShadow=mesh.receiveShadow=true;
+  return mesh;
+}
+
+function makeManifoldGasket(){
+  const g=new THREE.Group();
+  const m=material(0xffa447,.08);
+  const ring1=new THREE.Mesh(ringGeometry(78,50,16),m);
+  ring1.castShadow=ring1.receiveShadow=true; g.add(ring1);
+  const rim=new THREE.Mesh(new THREE.BoxGeometry(145,38,16),m);
+  rim.position.x=92;rim.castShadow=rim.receiveShadow=true;g.add(rim);
+  return g;
+}
+
+function makeCover(){
+  const g=new THREE.Group();
+  const m=material(0x8f1f16,.3);
+  const bars=[
+    [290,38,36,0,145],[290,38,36,0,-145],
+    [38,252,36,145,0],[38,252,36,-145,0]
+  ];
+  bars.forEach(([sx,sy,sz,x,y])=>{
+    const b=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),m);
+    b.position.set(x,y,0);b.castShadow=b.receiveShadow=true;g.add(b);
+  });
+  const logo=new THREE.Mesh(new THREE.BoxGeometry(105,42,10),material(0x2a3137,.2));
+  logo.position.set(0,0,21);logo.castShadow=true;g.add(logo);
+  return g;
+}
+
+function makeGenericPart(name){
+  const n=String(name).toLowerCase();
+  if(/base/.test(n))return makeBase();
+  if(/gasket.*cathode|frame.*gasket/.test(n))return makeMainGasket();
+  if(/manifold.*gasket/.test(n))return makeManifoldGasket();
+  if(/cover/.test(n))return makeCover();
+  const g=new THREE.Group();
+  const m=material(0x69747d,.18);
+  const box=new THREE.Mesh(new THREE.BoxGeometry(170,110,38),m);
+  box.castShadow=box.receiveShadow=true;g.add(box);
+  return g;
+}
+
+function basePosition(partName,quantityIndex){
+  const n=String(partName||"").toLowerCase();
+  if(/base/.test(n))return new THREE.Vector3(0,0,70);
+  if(/frame.*gasket/.test(n))return new THREE.Vector3(0,0,120);
+  if(/manifold.*gasket/.test(n)){
+    return new THREE.Vector3(quantityIndex===0?-135:135,0,142);
+  }
+  if(/cover/.test(n))return new THREE.Vector3(0,0,180);
+  return new THREE.Vector3(0,0,125+quantityIndex*45);
+}
+
+function addDemoParts(){
+  DEMO.steps.forEach(step=>{
+    if(step.action!=="PLACE")return;
+    for(let q=0;q<step.quantity;q++){
+      const obj=makeGenericPart(step.partName);
+      const base=basePosition(step.partName,q);
+      obj.position.copy(base);
+      state.root.add(obj);
+      const start=base.clone().add(new THREE.Vector3((q?80:-80),q?40:-40,260+step.number*20));
+      obj.position.copy(start);
+      obj.visible=false;
+      state.layers.push({object:obj,base,rest:base.clone(),step:step.number,kind:"demo"});
+    }
+  });
+}
+
+function proceduralFromStep(step,index,total){
+  if(step.action!=="PLACE")return;
+  const qty=Math.max(1,Number(step.quantity)||1);
+  for(let q=0;q<qty;q++){
+    const obj=makeGenericPart(step.partName||step.name);
+    const base=new THREE.Vector3((index-total/2)*120+(q*70),q?40:0,70+index*20);
+    obj.position.copy(base);
+    state.root.add(obj);
+    const start=base.clone().add(new THREE.Vector3(0,0,300+step.number*20));
+    obj.position.copy(start);
+    obj.visible=false;
+    state.layers.push({object:obj,base,rest:base.clone(),step:step.number,kind:"procedural"});
+  }
+}
+
+function rootAdd(obj,step,index,total,kind){
+  obj.traverse(n=>{if(n.isMesh){n.castShadow=true;n.receiveShadow=true}});
+  const base=basePosition(step.partName||step.name,0);
+  obj.position.copy(base);
+  state.root.add(obj);
+  const start=base.clone().add(new THREE.Vector3(0,0,300+step.number*20));
+  obj.position.copy(start);
+  obj.visible=false;
+  state.layers.push({object:obj,base,rest:base.clone(),step:step.number,kind});
+}
+
 async function addPhotoPart(step,index,total){
- const fd=new FormData();fd.append("file",step.photoFile);fd.append("part_name",step.partName||step.name);fd.append("step_number",String(step.number));
- const r=await fetch(API+"/api/photo-to-3d",{method:"POST",body:fd});if(!r.ok)throw new Error("Photo 3D generation failed: "+await r.text());
- const x=await r.json(); await new Promise((resolve,reject)=>state.loader.load(API+x.modelUrl,g=>{const o=g.scene;rootAdd(o,step,index,total,"photo");resolve()},undefined,reject));
+  const fd=new FormData();
+  fd.append("file",step.photoFile);
+  fd.append("part_name",step.partName||step.name);
+  fd.append("step_number",String(step.number));
+  const r=await fetch(API+"/api/photo-to-3d",{method:"POST",body:fd});
+  if(!r.ok)throw new Error("Photo-to-3D failed: "+await r.text());
+  const data=await r.json();
+  const loaded=await new Promise((resolve,reject)=>state.loader.load(API+data.modelUrl,g=>resolve(g.scene),undefined,reject));
+  for(let q=0;q<Math.max(1,Number(step.quantity)||1);q++){
+    const obj=q===0?loaded:loaded.clone(true);
+    rootAdd(obj,step,index,total,"photo");
+  }
 }
-function rootAdd(o,step,index,total,kind){o.position.copy(restFor(index,total));o.traverse(n=>{if(n.isMesh){n.castShadow=true;n.receiveShadow=true}});state.root.add(o);const rest=o.position.clone();o.position.z+=280+step.number*35;state.layers.push({object:o,rest,step:step.number,kind});}
-function textScore(a,b){a=String(a||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();b=String(b||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();if(!a||!b)return 0;if(a===b)return 100;if(a.includes(b)||b.includes(a))return 80;const A=new Set(a.split(/\s+/)),B=b.split(/\s+/);return B.reduce((n,x)=>n+(x.length>2&&A.has(x)?16:0),0)}
-function findCadTargets(scene,stepNames){
- const groups=[];
- scene.traverse(n=>{if(!n.name)return;const hasMesh=n.children?.some(x=>x.isMesh)||n.isMesh;if(hasMesh)groups.push(n)});
- const used=new Set(),matches=[];
- for(const s of stepNames){let best=null,bs=0;for(const n of groups){if(used.has(n.uuid))continue;const sc=textScore(n.name,s.partName||s.name);if(sc>bs){bs=sc;best=n}}if(best&&bs>=16){used.add(best.uuid);matches.push({node:best,step:s.number,score:bs})}}
- return matches;
+
+async function loadModelFile(){
+  const file=state.modelFile;
+  if(!file)return {matchedSteps:new Set()};
+  let obj,components=[];
+  if(/\.(glb|gltf)$/i.test(file.name)){
+    const url=URL.createObjectURL(file);
+    obj=await new Promise((resolve,reject)=>state.loader.load(url,g=>resolve(g.scene),undefined,reject));
+    URL.revokeObjectURL(url);
+  }else{
+    const fd=new FormData();fd.append("file",file);
+    const r=await fetch(API+"/api/convert-step",{method:"POST",body:fd});
+    if(!r.ok)throw new Error("STEP conversion failed: "+await r.text());
+    const data=await r.json();
+    components=data.assemblyParts||[];
+    obj=await new Promise((resolve,reject)=>state.loader.load(API+data.modelUrl,g=>resolve(g.scene),undefined,reject));
+  }
+
+  obj.traverse(n=>{if(n.isMesh){n.castShadow=true;n.receiveShadow=true;n.visible=false}});
+  state.root.add(obj);
+
+  const placeSteps=state.steps.filter(s=>s.action==="PLACE");
+  const used=new Set(),matchedSteps=new Set();
+
+  const nodes=[];
+  obj.traverse(n=>{
+    if(!n.name)return;
+    const hasMesh=n.isMesh||n.children?.some(c=>c.isMesh);
+    if(hasMesh)nodes.push(n);
+  });
+
+  function score(a,b){
+    const na=String(a||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+    const nb=String(b||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+    if(!na||!nb)return 0;if(na===nb)return 100;
+    if(na.includes(nb)||nb.includes(na))return 80;
+    const A=new Set(na.split(/\s+/)),B=nb.split(/\s+/);let hit=0;A.forEach(x=>{if(x.length>2&&B.has(x))hit++});
+    return hit*18;
+  }
+
+  for(const step of placeSteps){
+    let best=null,bestScore=0;
+    for(const node of nodes){
+      if(used.has(node.uuid))continue;
+      const s=score(node.name,step.partName||step.name);
+      if(s>bestScore){bestScore=s;best=node}
+    }
+    if(best&&bestScore>=18){
+      used.add(best.uuid);
+      best.traverse(n=>{if(n.isMesh)n.visible=false});
+      const base=basePosition(step.partName||step.name,0);
+      best.position.copy(base);
+      const start=base.clone().add(new THREE.Vector3(0,0,300+step.number*20));
+      best.position.copy(start);
+      state.layers.push({object:best,base,rest:base.clone(),step:step.number,kind:"cad"});
+      matchedSteps.add(step.number);
+    }
+  }
+
+  if(!matchedSteps.size){
+    obj.traverse(n=>{if(n.isMesh)n.visible=false});
+  }
+  return {matchedSteps};
 }
-async function addCad(){
- const f=state.modelFile;if(!f)return;
- let obj,components=[];
- if(/\.(glb|gltf)$/i.test(f.name)){
-   const url=URL.createObjectURL(f);
-   obj=await new Promise((resolve,reject)=>state.loader.load(url,g=>resolve(g.scene),undefined,reject));
- }else{
-   const fd=new FormData();fd.append("file",f);
-   const r=await fetch(API+"/api/convert-step",{method:"POST",body:fd});
-   if(!r.ok)throw new Error("STEP conversion failed: "+await r.text());
-   const x=await r.json();components=x.assemblyParts||[];
-   obj=await new Promise((resolve,reject)=>state.loader.load(API+x.modelUrl,g=>resolve(g.scene),undefined,reject));
- }
- obj.traverse(n=>{if(n.isMesh){n.castShadow=true;n.receiveShadow=true;n.visible=false}});
- state.root.add(obj);
- const placeSteps=state.steps.filter(s=>s.action==="PLACE");
- const matches=findCadTargets(obj,placeSteps);
- if(matches.length){
-   matches.forEach(m=>{
-     m.node.traverse(n=>{if(n.isMesh)n.visible=true});
-     const rest=m.node.position.clone();
-     const start=rest.clone();start.z+=280+m.step*35;
-     m.node.position.copy(start);
-     state.layers.push({object:m.node,rest,step:m.step,kind:"cad"});
-   });
- }else{
-   obj.traverse(n=>{if(n.isMesh)n.visible=true});
-   const rest=new THREE.Vector3(0,0,35);obj.position.copy(rest.clone().add(new THREE.Vector3(0,0,320)));
-   state.layers.push({object:obj,rest,step:1,kind:"cad"});
- }
- return {componentCount:components.length,matchedCount:matches.length};
-}
+
 async function build(){
- if(!state.steps.length){$("buildStatus").textContent="Add at least one step.";return}
- state.stage=0;state.explode=false;clear3D();
- const total=state.steps.length;
- for(let i=0;i<state.steps.length;i++){const s=state.steps[i];if(s.action!=="PLACE")continue;if(s.photoFile&&!state.modelFile)await addPhotoPart(s,i,total);else if(!state.modelFile)addProceduralPart(s,i,total)}
- if(state.modelFile)await addCad();
- state.layers.forEach(l=>{l.object.visible=true;l.object.position.z=l.rest.z+280+l.step*35});fit();applyStage();render();
+  if(!state.steps.length)throw new Error("Add at least one assembly step.");
+  state.animation=null;state.stage=0;state.explode=false;state.auto=false;clearTimeout(state.autoTimer);clear3D();
+  const total=state.steps.length;
+  const matched=new Set();
+
+  if(state.modelFile){
+    const result=await loadModelFile();
+    result.matchedSteps.forEach(x=>matched.add(x));
+  }
+
+  for(let i=0;i<state.steps.length;i++){
+    const s=state.steps[i];
+    if(s.action!=="PLACE")continue;
+    if(state.modelFile&&matched.has(s.number))continue;
+    if(s.photoFile)await addPhotoPart(s,i,total);
+    else if(!state.modelFile)proceduralFromStep(s,i,total);
+    else proceduralFromStep(s,i,total);
+  }
+
+  fitCamera();
+  applyStage();
+  render();
 }
-function fit(){const box=new THREE.Box3().setFromObject(state.root);if(box.isEmpty())return;const size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3()),r=Math.max(size.x,size.y,size.z)*.85;state.camera.position.set(center.x+r,center.y-r*1.35,center.z+r*.8);state.controls.target.copy(center);state.controls.update()}
-function applyStage(){state.layers.forEach(l=>{l.object.visible=true;if(l.step<=state.stage)l.object.position.copy(l.rest);else l.object.position.set(l.rest.x,l.rest.y,l.rest.z+280+l.step*35)})}
-function next(){if(state.stage>=state.steps.length)return;state.stage++;const ls=state.layers.filter(l=>l.step===state.stage);const start=ls.map(l=>{const v=l.rest.clone();v.z+=280+l.step*35;l.object.position.copy(v);return{object:l.object,rest:l.rest.clone(),start:v}});state.anim={layers:start,t:performance.now(),d:950};render()}
-function prev(){state.stage=Math.max(0,state.stage-1);state.anim=null;applyStage();render()}
-function reset(){state.auto=false;state.stage=0;state.explode=false;$("autoBtn").textContent="Auto play";$("explodeBtn").textContent="Exploded view";applyStage();render()}
-function auto(){if(state.auto){state.auto=false;$("autoBtn").textContent="Auto play";return}state.auto=true;$("autoBtn").textContent="Stop";runAuto()}
-function runAuto(){if(!state.auto)return;if(state.stage>=state.steps.length){state.auto=false;$("autoBtn").textContent="Auto play";return}next();setTimeout(runAuto,1250)}
-function photoPreview(file){$("photoPreview").innerHTML="";const img=document.createElement("img"),url=URL.createObjectURL(file);img.src=url;$("photoPreview").appendChild(img);const s=document.createElement("span");s.className="small";s.textContent=file.name;$("photoPreview").appendChild(s)}
+
+function fitCamera(){
+  const box=new THREE.Box3().setFromObject(state.root);
+  if(box.isEmpty())return;
+  const size=box.getSize(new THREE.Vector3());
+  const center=box.getCenter(new THREE.Vector3());
+  const radius=Math.max(size.x,size.y,size.z)*1.15;
+  state.camera.position.set(center.x+radius,center.y-radius*1.25,center.z+radius*.85);
+  state.controls.target.copy(center);
+  state.controls.update();
+}
+
+function applyStage(){
+  state.layers.forEach(l=>{
+    const visible=l.step<=state.stage;
+    l.object.visible=visible;
+    if(visible)l.object.position.copy(l.base);
+  });
+}
+
+function next(){
+  if(state.stage>=state.steps.length)return;
+  state.stage++;
+  const items=state.layers.filter(l=>l.step===state.stage);
+  items.forEach(l=>{l.object.visible=true});
+  const animationItems=items.map(l=>{
+    const start=l.base.clone().add(new THREE.Vector3(0,0,300+l.step*20));
+    l.object.position.copy(start);
+    return {object:l.object,start,end:l.base.clone()};
+  });
+  state.animation={items:animationItems,time:performance.now(),duration:1000};
+  render();
+}
+
+function previous(){
+  state.auto=false;clearTimeout(state.autoTimer);
+  state.stage=Math.max(0,state.stage-1);
+  state.animation=null;applyStage();render();
+}
+
+function reset(){
+  state.auto=false;clearTimeout(state.autoTimer);state.animation=null;state.stage=0;state.explode=false;
+  $("autoBtn").textContent="Auto play";$("explodeBtn").textContent="Exploded view";
+  applyStage();render();
+}
+
+function autoPlay(){
+  if(state.auto){state.auto=false;clearTimeout(state.autoTimer);$("autoBtn").textContent="Auto play";return}
+  state.auto=true;$("autoBtn").textContent="Stop";
+  playAuto();
+}
+
+function playAuto(){
+  if(!state.auto)return;
+  if(state.stage>=state.steps.length){
+    state.auto=false;$("autoBtn").textContent="Auto play";return;
+  }
+  next();
+  state.autoTimer=setTimeout(playAuto,1250);
+}
+
+function toggleExplode(){
+  state.explode=!state.explode;
+  $("explodeBtn").textContent=state.explode?"Collapse":"Exploded view";
+  render();
+}
+
+function render(){
+  if(!state.steps.length)return;
+  const s=state.steps[Math.max(0,state.stage-1)]||state.steps[0];
+  $("sceneTitle").textContent=state.projectName||"Generated assembly";
+  $("sceneProgress").textContent=state.stage+" / "+state.steps.length;
+  $("sceneMode").textContent=state.loadedProjectId==="demo-hydep-frame"||state.projectName.includes("3D Demo")?"Built-in demo":(state.modelFile?"CAD + steps":"Photo/procedural");
+  $("currentTitle").textContent=s.name;
+  $("currentText").textContent=s.instruction;
+  $("currentChips").innerHTML='<span class="chip">Action: '+esc(s.action)+'</span><span class="chip">Part: '+esc(s.partName||s.name)+'</span><span class="chip">Qty: '+s.quantity+'</span>';
+  $("currentImage").innerHTML=s.photoUrl?'<img src="'+esc(s.photoUrl)+'" alt="Step reference">':"";
+  $("stepCount").textContent=state.steps.length;
+  $("photoStatus").textContent=state.steps.filter(x=>x.photoFile||x.photoUrl).length;
+  renderSteps();
+}
+
+function renderSteps(){
+  const box=$("steps");box.innerHTML="";
+  state.steps.forEach((s,i)=>{
+    const d=document.createElement("div");
+    d.className="stepitem "+(state.stage===s.number?"active":"");
+    d.innerHTML='<div class="num">'+s.number+'</div><div><strong>'+esc(s.name)+'</strong><p>'+esc(s.instruction)+'</p><div class="chips"><span class="chip">'+esc(s.action)+'</span><span class="chip">'+esc(s.partName||s.name)+'</span><span class="chip">Qty '+s.quantity+'</span></div></div>'+(s.photoUrl?'<img class="thumb" src="'+esc(s.photoUrl)+'">':'<span class="small">No photo</span>');
+    d.onclick=()=>{state.stage=s.number;state.animation=null;applyStage();render()};
+    const del=document.createElement("button");del.className="btn danger";del.textContent="×";
+    del.onclick=e=>{e.stopPropagation();state.steps.splice(i,1);state.steps.forEach((x,k)=>x.number=k+1);state.stage=Math.min(state.stage,state.steps.length);render()};
+    d.appendChild(del);box.appendChild(d);
+  });
+}
+
+function esc(x){return String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+function clearStep(){
+  $("stepName").value="";$("stepText").value="";$("partName").value="";$("qty").value="1";$("stepAction").value="PLACE";$("stepPhoto").value="";
+  $("photoPreview").innerHTML='<span class="small">No photo selected</span>';
+}
+
 function addStep(){
- const name=$("stepName").value.trim(),text=$("stepText").value.trim(),part=$("partName").value.trim(),qty=Math.max(1,Number($("qty").value)||1),action=$("stepAction").value,photo=$("stepPhoto").files[0]||null;
- if(!name||!text){$("stepStatus").textContent="Step name and explanation are required.";return}
- const step={number:state.steps.length+1,name,instruction:text,action,partName:part||name,quantity:qty,photoFile:photo,photoUrl:photo?URL.createObjectURL(photo):null};
- state.steps.push(step); clearStep(); renderStepList(); render(); $("stepStatus").textContent=state.steps.length+" step(s) created";$("projectStatus").textContent=state.steps.length+" step(s) ready";$("photoStatus").textContent=state.steps.filter(s=>s.photoFile).length;
+  const name=$("stepName").value.trim(),instruction=$("stepText").value.trim(),part=$("partName").value.trim();
+  const action=$("stepAction").value,quantity=Math.max(1,Number($("qty").value)||1),photo=$("stepPhoto").files[0]||null;
+  if(!name||!instruction){$("stepStatus").textContent="Step name and explanation are required.";return}
+  const number=state.steps.length+1;
+  state.steps.push({number,name,instruction,action,partName:part||name,quantity,photoFile:photo,photoUrl:photo?URL.createObjectURL(photo):null});
+  state.loadedProjectId=null;
+  clearStep();state.stage=0;$("stepStatus").textContent=state.steps.length+" step(s) created";
+  $("projectStatus").textContent="Unsaved project";render();
 }
-function clearStep(){$("stepName").value="";$("stepText").value="";$("partName").value="";$("qty").value="1";$("stepAction").value="PLACE";$("stepPhoto").value="";$("photoPreview").innerHTML='<span class="small">No photo selected</span>'}
-function removeStep(i){state.steps.splice(i,1);state.steps.forEach((s,k)=>s.number=k+1);renderStepList();$("stepStatus").textContent=state.steps.length+" step(s) created";$("photoStatus").textContent=state.steps.filter(s=>s.photoFile).length}
-function renderStepList(){const box=$("steps");box.innerHTML="";$("stepCount").textContent=state.steps.length;state.steps.forEach((s,i)=>{const d=document.createElement("div");d.className="stepitem "+(state.stage===s.number?"active":"");d.innerHTML='<div class="num">'+s.number+'</div><div><strong>'+esc(s.name)+'</strong><p>'+esc(s.instruction)+'</p><div class="chips"><span class="chip">'+esc(s.action)+'</span><span class="chip">'+esc(s.partName)+'</span><span class="chip">Qty '+s.quantity+'</span></div></div>'+(s.photoUrl?'<img class="thumb" src="'+s.photoUrl+'">':'<span class="small">No photo</span>');d.onclick=()=>{state.stage=s.number;applyStage();render()};const del=document.createElement("button");del.className="btn danger";del.textContent="×";del.onclick=e=>{e.stopPropagation();removeStep(i)};d.appendChild(del);box.appendChild(d)})}
-function render(){if(!state.steps.length){$("sceneTitle").textContent="No assembly yet";$("sceneMode").textContent="Waiting";$("sceneProgress").textContent="0 / 0";$("currentTitle").textContent="Ready";$("currentText").textContent="Add a step to begin.";return}const s=state.steps[state.stage-1]||state.steps[0];$("sceneTitle").textContent=$("projectName").value.trim()||"Generated assembly";$("sceneProgress").textContent=state.stage+" / "+state.steps.length;$("sceneMode").textContent=state.modelFile?"CAD + steps":"Photo/procedural";$("currentTitle").textContent=s.name;$("currentText").textContent=s.instruction;$("currentChips").innerHTML='<span class="chip">Action: '+esc(s.action)+'</span><span class="chip">Part: '+esc(s.partName)+'</span><span class="chip">Qty: '+s.quantity+'</span>';$("currentImage").innerHTML=s.photoUrl?'<img src="'+s.photoUrl+'" alt="Step photo" style="grid-column:1/-1;width:100%;height:180px;object-fit:contain;background:#fff;border-radius:8px;border:1px solid var(--line)">':'';renderStepList()}
-function esc(x){return String(x??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
-function exportJson(){const data={version:"0.4",project:{name:$("projectName").value.trim()||"Generated assembly"},steps:state.steps.map(s=>({number:s.number,name:s.name,instruction:s.instruction,action:s.action,partName:s.partName,quantity:s.quantity,hasPhoto:!!s.photoFile})),model:{fileName:state.modelFile?.name||null,source:state.modelFile?"CAD":"photo/procedural"},review:{status:"requires-human-review"}};const u=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));const a=document.createElement("a");a.href=u;a.download="assembly.json";a.click();URL.revokeObjectURL(u)}
+
+function newProject(){
+  state.loadedProjectId=null;state.steps=[];state.projectName="";state.sourceMode="photo";state.modelFile=null;state.stage=0;
+  $("projectName").value="";$("sourceMode").value="photo";$("modelFile").value="";$("cadStatus").textContent="Not loaded";
+  clear3D();clearStep();$("projectStatus").textContent="New project";$("stepStatus").textContent="0 steps created";
+  $("buildStatus").textContent="Create at least one step.";render();
+}
+
+function loadDemo(){
+  state.loadedProjectId="demo-hydep-frame";state.projectName=DEMO.name;state.sourceMode="photo";state.steps=cloneDemoSteps();state.modelFile=null;state.stage=0;state.explode=false;
+  $("projectName").value=DEMO.name;$("sourceMode").value="photo";$("cadStatus").textContent="Built-in 3D";$("photoStatus").textContent="7 reference images";
+  clearStep();clear3D();addDemoParts();fitCamera();applyStage();$("projectStatus").textContent="Demo ready";$("buildStatus").textContent="Demo 3D assembly loaded. Click Assemble next or Auto play.";render();
+}
+
+async function openHydepDemo(){
+  loadDemo();
+  await build();
+  $("buildStatus").textContent="Demo 3D assembly ready. Click Assemble next or Auto play.";
+}
+window.openHydepDemo=openHydepDemo;
 
 async function fileFromUrl(url,fallbackName){
- const r=await fetch(API+url); if(!r.ok)throw new Error("Could not load saved file");
- const b=await r.blob(); const name=(url.split("/").pop()||fallbackName||"saved-file");
- return new File([b],decodeURIComponent(name),{type:b.type||"application/octet-stream"});
-}
-async function refreshProjects(){
- const builtin=[{id:"demo-hydep-frame",name:"Hydep Frame Sub-Assembly — 3D Demo",demo:true,updatedAt:"2026-09-19T00:00:00+00:00",stepCount:7,sourceMode:"photo",builtIn3D:"hydep-procedural"}];
- try{
-  const r=await fetch(API+"/api/projects"); if(!r.ok)throw new Error("Project library unavailable");
-  const x=await r.json();
-  const remote=(x.projects||[]).filter(p=>p.id!=="demo-hydep-frame");
-  state.savedProjects=[...builtin,...remote];
-  renderLibrary();
- }catch(e){
-  state.savedProjects=builtin;
-  renderLibrary();
-  $("buildStatus").textContent="Built-in 3D demo is ready. Start the backend to save your own assemblies.";
- }
-}
-function renderLibrary(){
- const box=$("projectLibrary"); $("projectCount").textContent=state.savedProjects.length;
- if(!state.savedProjects.length){box.innerHTML='<div class="empty">No saved assemblies yet.</div>';return}
- box.innerHTML="";
- state.savedProjects.forEach(p=>{
-  const d=document.createElement("div"); d.className="projectcard";
-  const meta=p.demo?"7 assembly steps · Built-in 3D model":(p.stepCount+" steps · "+(p.sourceMode==="cad"?"CAD":p.sourceMode==="mixed"?"CAD + photo":"Photo"));
-  const buttonText=p.demo?"Open & Play Demo":"Load";
-  d.innerHTML='<strong>'+esc(p.name)+(p.demo?' <span class="chip">DEMO · 3D READY</span>':'')+'</strong><div class="meta">'+meta+'</div><div class="actions"><button class="btn primary load-project">'+buttonText+'</button>'+(p.demo?'':'<button class="btn danger delete-project">Delete</button>')+'</div>';
-  d.querySelector(".load-project").onclick=()=>loadProject(p.id);
-  const del=d.querySelector(".delete-project"); if(del)del.onclick=()=>deleteProject(p.id);
-  box.appendChild(d);
- });}
-async function loadProject(projectId){
- try{
-  $("buildStatus").textContent="Loading saved assembly…";
-  if(projectId==="demo-hydep-frame"){
-   loadDemo();
-   await build();
-   $("buildStatus").textContent="Demo 3D assembly ready. Click Assemble next or Auto play.";
-   return;
-  }
-  const r=await fetch(API+"/api/projects/"+encodeURIComponent(projectId));
-  if(!r.ok){
-   throw new Error("Could not load project");
-  }
-  const p=await r.json();
-  state.loadedProjectId=p.id; state.projectName=p.name; state.modelFile=null; state.steps=[];
-  $("projectName").value=p.name||""; $("sourceMode").value=p.sourceMode||"photo"; $("cadStatus").textContent="Not loaded";
-  for(const s of (p.steps||[])){
-   let photoFile=null;
-   if(s.photoUrl) photoFile=await fileFromUrl(s.photoUrl,"step-"+s.number+".png");
-   state.steps.push({...s,photoFile,photoUrl:s.photoUrl||null});
-  }
-  if(p.model?.modelUrl){
-   state.modelFile=await fileFromUrl(p.model.modelUrl,p.model.fileName||"assembly.glb");
-   $("cadStatus").textContent=p.model.fileName||"Saved 3D model";
-  }
-  $("photoStatus").textContent=state.steps.filter(s=>s.photoFile).length;
-  state.stage=0; state.explode=false; clear3D(); renderStepList(); render();
-  $("projectStatus").textContent="Loaded: "+p.name;
-  $("buildStatus").textContent="Saved assembly loaded. Click Build 3D to regenerate the viewer.";
- }catch(e){console.error(e);$("buildStatus").textContent=e.message}
-}
-async function saveProject(options={}){
- const silent=!!options.silent;
- const name=$("projectName").value.trim()||"Untitled Assembly";
- const data={id:state.loadedProjectId||null,name,sourceMode:$("sourceMode").value,steps:state.steps.map(s=>({number:s.number,name:s.name,instruction:s.instruction,action:s.action,partName:s.partName,quantity:s.quantity,photoUrl:s.photoUrl||null}))};
- const fd=new FormData(); 
- state.steps.forEach(s=>{
-  if(s.photoFile){const uploadName="__step_"+s.number+"__"+(s.photoFile.name||("step-"+s.number+".png")); s.photoUploadName=uploadName; data.steps[s.number-1].photoUploadName=uploadName; fd.append("photos",s.photoFile,uploadName)}
- });
- fd.append("project",JSON.stringify(data));
- if(state.modelFile)fd.append("model_file",state.modelFile,state.modelFile.name||"assembly.glb");
- const r=await fetch(API+"/api/projects",{method:"POST",body:fd});
- if(!r.ok)throw new Error("Could not save assembly: "+await r.text());
- const saved=await r.json(); state.loadedProjectId=saved.id;
- saved.steps.forEach(s=>{const local=state.steps.find(x=>x.number===s.number);if(local)local.photoUrl=s.photoUrl||null});
- $("projectStatus").textContent="Saved: "+saved.name; 
- await refreshProjects();
- if(!silent) $("buildStatus").textContent="Assembly saved in Project Library.";
- return saved;
-}
-async function deleteProject(projectId){
- if(!confirm("Delete this saved assembly?"))return;
- try{
-  const r=await fetch(API+"/api/projects/"+encodeURIComponent(projectId),{method:"DELETE"});
-  if(!r.ok)throw new Error(await r.text());
-  if(state.loadedProjectId===projectId)state.loadedProjectId=null;
-  await refreshProjects();
- }catch(e){$("buildStatus").textContent=e.message}
+  const r=await fetch(API+url);if(!r.ok)throw new Error("Could not load saved file");
+  const blob=await r.blob();
+  return new File([blob],decodeURIComponent((url.split("/").pop()||fallbackName)),{type:blob.type||"application/octet-stream"});
 }
 
-function loadDemo(){state.steps=[];state.modelFile=null;$("projectName").value="Hydep Frame Sub-Assembly";const rows=[
-["Pick & load Frame Base","Pick and load the Frame Base on the fixture with the help of the manipulator.","Frame Base","PLACE",1],
-["Scan QR Code","Scan the QR Code with the hand-held scanner.","Frame Base","SCAN",1],
-["Place Frame Gasket Cathode","Pick the Frame Gasket Cathode and place it on the frame base.","Frame Gasket Cathode","PLACE",1],
-["Place Manifold Gasket","Pick the manifold gasket and place it on the frame base.","Manifold Gasket","PLACE",2],
-["Place Frame Cover","Pick the Frame Cover and place it on the frame base.","Frame Cover","PLACE",1],
-["Move barcode to placard","Remove the Bar Code from the Frame Cover and stick it on the placard.","Frame Cover","LABEL",1],
-["Movement to next station","Move the assembly to the next station.","Assembly","MOVE",1]
-];
-rows.forEach(r=>state.steps.push({number:state.steps.length+1,name:r[0],instruction:r[1],partName:r[2],action:r[3],quantity:r[4],photoFile:null,photoUrl:null}));
-state.stage=0;clear3D();addDemoGeometry();render();$("buildStatus").textContent="Hydep demo loaded. Click Assemble next."}
-function addDemoGeometry(){clear3D();const total=state.steps.length;state.steps.forEach((s,i)=>addProceduralPart(s,i,total));fit();applyStage()}
-$("loadDemo").onclick=loadDemo;$("addStep").onclick=addStep;$("clearStep").onclick=clearStep;$("buildBtn").onclick=async()=>{try{$("buildStatus").textContent="Building 3D…";await build();$("buildStatus").textContent="3D assembly built successfully."}catch(e){console.error(e);$("buildStatus").textContent=e.message}};$("prevBtn").onclick=prev;$("nextBtn").onclick=next;$("autoBtn").onclick=auto;$("resetBtn").onclick=reset;$("explodeBtn").onclick=()=>{state.explode=!state.explode;$("explodeBtn").textContent=state.explode?"Collapse":"Exploded view"};$("exportBtn").onclick=exportJson;$("stepPhoto").onchange=e=>{const f=e.target.files[0];if(f)photoPreview(f)};$("modelFile").onchange=e=>{state.modelFile=e.target.files[0]||null;$("cadStatus").textContent=state.modelFile?state.modelFile.name:"Not loaded";render()};
-$("projectName").oninput=render;init3D();loadDemo();renderLibrary();refreshProjects();fetch(API+"/api/health").then(r=>r.json()).then(()=>$("backend").textContent="Connected").catch(()=>$("backend").textContent="Run python start.py");
-})();
+function renderLibrary(){
+  const box=$("projectLibrary");const demo={id:DEMO.id,name:DEMO.name,demo:true,stepCount:7,sourceMode:"photo"};
+  const projects=[demo,...state.savedProjects.filter(p=>p.id!==DEMO.id)];
+  $("projectCount").textContent=projects.length;box.innerHTML="";
+  projects.forEach(p=>{
+    const d=document.createElement("div");d.className="projectcard"+(p.demo?" demo":"");
+    const meta=p.demo?"7 assembly steps · Built-in 3D model":p.stepCount+" steps · "+(p.sourceMode==="cad"?"CAD":p.sourceMode==="mixed"?"CAD + photo":"Photo");
+    d.innerHTML='<strong>'+esc(p.name)+(p.demo?' <span class="chip">DEMO · 3D READY</span>':'')+'</strong><div class="meta">'+meta+'</div><div class="actions"><button class="btn primary load-project">'+(p.demo?"Open & Play Demo":"Load")+'</button>'+(!p.demo?'<button class="btn danger delete-project">Delete</button>':'')+'</div>';
+    d.querySelector(".load-project").onclick=()=>p.demo?openHydepDemo():loadProject(p.id);
+    const del=d.querySelector(".delete-project");if(del)del.onclick=()=>deleteProject(p.id);
+    box.appendChild(d);
+  });
+}
+
+async function refreshProjects(){
+  const r=await fetch(API+"/api/projects");
+  if(!r.ok)throw new Error("Project library unavailable");
+  const data=await r.json();
+  state.savedProjects=(data.projects||[]).filter(p=>p.id!==DEMO.id);
+  renderLibrary();
+}
+
+async function loadProject(id){
+  $("buildStatus").textContent="Loading saved assembly…";
+  const r=await fetch(API+"/api/projects/"+encodeURIComponent(id));
+  if(!r.ok)throw new Error("Could not load project");
+  const p=await r.json();
+  state.loadedProjectId=p.id;state.projectName=p.name||"Saved assembly";state.steps=[];state.modelFile=null;state.stage=0;
+  $("projectName").value=state.projectName;$("sourceMode").value=p.sourceMode||"photo";
+  for(const s of p.steps||[]){
+    const photoFile=s.photoUrl?await fileFromUrl(s.photoUrl,"step-"+s.number+".png"):null;
+    state.steps.push({...s,photoFile,photoUrl:s.photoUrl||null});
+  }
+  if(p.model?.modelUrl){
+    state.modelFile=await fileFromUrl(p.model.modelUrl,p.model.fileName||"assembly.glb");
+    $("cadStatus").textContent=p.model.fileName||"Saved model";
+  }else $("cadStatus").textContent="Not loaded";
+  clear3D();render();$("projectStatus").textContent="Loaded: "+state.projectName;$("buildStatus").textContent="Saved assembly loaded. Click Build 3D.";
+}
+
+async function saveProject(){
+  if(!state.steps.length)throw new Error("Add at least one step before saving.");
+  const data={
+    id:state.loadedProjectId&&state.loadedProjectId!==DEMO.id?state.loadedProjectId:null,
+    name:$("projectName").value.trim()||"Untitled Assembly",
+    sourceMode:$("sourceMode").value,
+    steps:state.steps.map(s=>({number:s.number,name:s.name,instruction:s.instruction,action:s.action,partName:s.partName,quantity:s.quantity,photoUrl:s.photoUrl||null}))
+  };
+  const fd=new FormData();
+  state.steps.forEach((s,i)=>{
+    if(s.photoFile){
+      const uploadName="step_"+(i+1)+"_"+(s.photoFile.name||"photo.png");
+      data.steps[i].photoUploadName=uploadName;
+      fd.append("photos",s.photoFile,uploadName);
+    }
+  });
+  fd.append("project",JSON.stringify(data));
+  if(state.modelFile)fd.append("model_file",state.modelFile,state.modelFile.name||"model.glb");
+  const r=await fetch(API+"/api/projects",{method:"POST",body:fd});
+  if(!r.ok)throw new Error("Save failed: "+await r.text());
+  const saved=await r.json();state.loadedProjectId=saved.id;
+  await refreshProjects();
+  $("projectStatus").textContent="Saved";$("buildStatus").textContent="Assembly saved to Project Library.";
+}
+
+async function deleteProject(id){
+  if(!confirm("Delete this saved assembly?"))return;
+  const r=await fetch(API+"/api/projects/"+encodeURIComponent(id),{method:"DELETE"});
+  if(!r.ok)throw new Error(await r.text());
+  if(state.loadedProjectId===id)newProject();
+  await refreshProjects();
+}
+
+$("loadDemo").onclick=()=>openHydepDemo().catch(e=>showError(e.message));
+$("addStep").onclick=addStep;
+$("clearStep").onclick=clearStep;
+$("newProjectBtn").onclick=newProject;
+$("buildBtn").onclick=async()=>{
+  try{$("buildStatus").textContent="Building 3D assembly…";await build();$("buildStatus").textContent="3D assembly built successfully."}
+  catch(e){console.error(e);$("buildStatus").textContent=e.message}
+};
+$("prevBtn").onclick=previous;
+$("nextBtn").onclick=next;
+$("autoBtn").onclick=autoPlay;
+$("resetBtn").onclick=reset;
+$("explodeBtn").onclick=toggleExplode;
+$("exportBtn").onclick=()=>{
+  const data={version:"0.5",project:{name:$("projectName").value.trim()||"Generated assembly"},steps:state.steps.map(s=>({number:s.number,name:s.name,instruction:s.instruction,action:s.action,partName:s.partName,quantity:s.quantity,hasPhoto:!!(s.photoFile||s.photoUrl)})),model:{fileName:state.modelFile?.name||null,source:state.modelFile?"CAD":"photo/procedural"},review:{status:"requires-human-review"}};
+  const u=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));const a=document.createElement("a");a.href=u;a.download="assembly.json";a.click();URL.revokeObjectURL(u);
+};
+$("saveProjectBtn").onclick=()=>saveProject().catch(e=>{console.error(e);$("buildStatus").textContent=e.message});
+$("refreshProjectsBtn").onclick=()=>refreshProjects().catch(e=>{$("buildStatus").textContent=e.message});
+$("modelFile").onchange=e=>{state.modelFile=e.target.files[0]||null;$("cadStatus").textContent=state.modelFile?state.modelFile.name:"Not loaded"};
+$("stepPhoto").onchange=e=>{
+  const file=e.target.files[0];
+  $("photoPreview").innerHTML="";
+  if(file){const img=document.createElement("img");img.src=URL.createObjectURL(file);$("photoPreview").appendChild(img);const s=document.createElement("span");s.className="small";s.textContent=file.name;$("photoPreview").appendChild(s);}
+};
+$("projectName").oninput=()=>{state.projectName=$("projectName").value;render()};
+$("sourceMode").onchange=e=>state.sourceMode=e.target.value;
+
+async function start(){
+  init3D();
+  loadDemo();
+  renderLibrary();
+  try{
+    await refreshProjects();
+    $("backend").textContent="Connected";
+    $("backend").style.color="var(--good)";
+  }catch(e){
+    $("backend").textContent="Offline";
+    $("backend").style.color="var(--danger)";
+    $("buildStatus").textContent="Built-in demo ready. Start the backend to save/load your own projects.";
+  }
+}
+
+start().catch(e=>showError("Application startup failed: "+e.message));
 </script>
-</body></html>
+</body>
+</html>
