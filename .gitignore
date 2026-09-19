@@ -4,3 +4,4 @@ generated/
 .venv/
 venv/
 .env
+projects/
