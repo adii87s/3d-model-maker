@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-import re, shutil, uuid
+import re, shutil, uuid, json
+from datetime import datetime, timezone
 from pathlib import Path
 import cv2
 import numpy as np
@@ -14,7 +15,9 @@ from shapely.ops import triangulate
 
 ROOT=Path(__file__).resolve().parent
 GENERATED=ROOT/"generated"
+PROJECTS=ROOT/"projects"
 GENERATED.mkdir(parents=True,exist_ok=True)
+PROJECTS.mkdir(parents=True,exist_ok=True)
 
 app=FastAPI(title="3D Assembly Maker API",version="0.2.0")
 app.add_middleware(CORSMiddleware,allow_origins=["*"],allow_methods=["*"],allow_headers=["*"])
@@ -130,4 +133,144 @@ async def photo_to_3d(file:UploadFile=File(...),part_name:str=Form("Photo recons
             "stepNumber":step_number,"modelUrl":f"/generated/{job.name}/model.glb",
             "exactGeometry":False,"method":"silhouette-extrusion"}
 
+
+def project_id_ok(project_id:str)->bool:
+    return bool(re.fullmatch(r"[a-zA-Z0-9_-]{1,80}", project_id or ""))
+
+def project_dir(project_id:str)->Path:
+    if not project_id_ok(project_id):
+        raise HTTPException(400,"Invalid project id")
+    return PROJECTS/project_id
+
+def demo_project():
+    return {
+        "id":"demo-hydep-frame",
+        "name":"Hydep Frame Sub-Assembly Demo",
+        "sourceMode":"photo",
+        "demo":True,
+        "createdAt":"2026-09-19T00:00:00+00:00",
+        "updatedAt":"2026-09-19T00:00:00+00:00",
+        "steps":[
+            {"number":1,"name":"Pick & load Frame Base","instruction":"Pick and load the Frame Base on the fixture with the help of the manipulator.","action":"PLACE","partName":"Frame Base","quantity":1,"photoUrl":None},
+            {"number":2,"name":"Scan QR Code","instruction":"Scan the QR Code with the hand-held scanner.","action":"SCAN","partName":"Frame Base","quantity":1,"photoUrl":None},
+            {"number":3,"name":"Place Frame Gasket Cathode","instruction":"Pick the Frame Gasket Cathode and place it on the frame base.","action":"PLACE","partName":"Frame Gasket Cathode","quantity":1,"photoUrl":None},
+            {"number":4,"name":"Place Manifold Gasket","instruction":"Pick the manifold gasket and place it on the frame base.","action":"PLACE","partName":"Manifold Gasket","quantity":2,"photoUrl":None},
+            {"number":5,"name":"Place Frame Cover","instruction":"Pick the Frame Cover and place it on the frame base.","action":"PLACE","partName":"Frame Cover","quantity":1,"photoUrl":None},
+            {"number":6,"name":"Move barcode to placard","instruction":"Remove the Bar Code from the Frame Cover and stick it on the placard.","action":"LABEL","partName":"Frame Cover","quantity":1,"photoUrl":None},
+            {"number":7,"name":"Movement to next station","instruction":"Move the assembly to the next station.","action":"MOVE","partName":"Assembly","quantity":1,"photoUrl":None}
+        ],
+        "model":{"fileName":None,"modelUrl":None}
+    }
+
+def write_project(data:dict)->None:
+    folder=project_dir(data["id"])
+    folder.mkdir(parents=True,exist_ok=True)
+    (folder/"photos").mkdir(parents=True,exist_ok=True)
+    (folder/"project.json").write_text(json.dumps(data,indent=2),encoding="utf-8")
+
+def read_project(project_id:str)->dict:
+    folder=project_dir(project_id)
+    path=folder/"project.json"
+    if not path.exists():
+        raise HTTPException(404,"Project not found")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+def ensure_demo_project():
+    data=demo_project()
+    path=PROJECTS/data["id"]/ "project.json"
+    if not path.exists():
+        write_project(data)
+
+ensure_demo_project()
+
+@app.get("/api/projects")
+def list_projects():
+    items=[]
+    for path in PROJECTS.iterdir():
+        if not path.is_dir(): continue
+        file=path/"project.json"
+        if not file.exists(): continue
+        try:
+            data=json.loads(file.read_text(encoding="utf-8"))
+            items.append({
+                "id":data.get("id",path.name),
+                "name":data.get("name","Untitled"),
+                "demo":bool(data.get("demo")),
+                "updatedAt":data.get("updatedAt"),
+                "stepCount":len(data.get("steps",[])),
+                "sourceMode":data.get("sourceMode","photo")
+            })
+        except Exception:
+            continue
+    items.sort(key=lambda x:(not x.get("demo",False),x.get("updatedAt") or ""),reverse=False)
+    return {"projects":items}
+
+@app.get("/api/projects/{project_id}")
+def get_project(project_id:str):
+    return read_project(project_id)
+
+@app.post("/api/projects")
+async def save_project(
+    project:str=Form(...),
+    model_file:UploadFile|None=File(default=None),
+    photos:list[UploadFile]=File(default=[])
+):
+    try:
+        data=json.loads(project)
+    except Exception as exc:
+        raise HTTPException(400,"Invalid project JSON") from exc
+    if not isinstance(data,dict):
+        raise HTTPException(400,"Project must be an object")
+    original_id=data.get("id")
+    if original_id=="demo-hydep-frame" or not project_id_ok(original_id or ""):
+        data["id"]=uuid.uuid4().hex[:16]
+        data["demo"]=False
+        data["createdAt"]=datetime.now(timezone.utc).isoformat()
+    else:
+        existing=read_project(original_id)
+        data["createdAt"]=existing.get("createdAt",datetime.now(timezone.utc).isoformat())
+        data["demo"]=False
+    data["updatedAt"]=datetime.now(timezone.utc).isoformat()
+    data.setdefault("name","Untitled")
+    data.setdefault("steps",[])
+    folder=project_dir(data["id"])
+    folder.mkdir(parents=True,exist_ok=True)
+    (folder/"photos").mkdir(parents=True,exist_ok=True)
+
+    incoming={}
+    for upload in photos:
+        incoming[Path(upload.filename or "").name]=upload
+
+    for step in data["steps"]:
+        key=step.get("photoUploadName")
+        if key and key in incoming:
+            upload=incoming[key]
+            saved=await save_upload(upload,folder/"photos")
+            step["photoUrl"]=f"/projects/{data['id']}/photos/{saved.name}"
+            step.pop("photoUploadName",None)
+        elif step.get("photoUrl"):
+            step.pop("photoUploadName",None)
+        else:
+            step["photoUrl"]=None
+
+    if model_file is not None:
+        saved_model=await save_upload(model_file,folder)
+        data["model"]={"fileName":model_file.filename,"modelUrl":f"/projects/{data['id']}/{saved_model.name}"}
+    else:
+        data.setdefault("model",{"fileName":None,"modelUrl":None})
+
+    write_project(data)
+    return data
+
+@app.delete("/api/projects/{project_id}")
+def delete_project(project_id:str):
+    if project_id=="demo-hydep-frame":
+        raise HTTPException(400,"The demo project cannot be deleted")
+    folder=project_dir(project_id)
+    if not folder.exists():
+        raise HTTPException(404,"Project not found")
+    shutil.rmtree(folder,ignore_errors=True)
+    return {"ok":True}
+
+app.mount("/projects",StaticFiles(directory=PROJECTS),name="projects")
 app.mount("/",StaticFiles(directory=ROOT,html=True),name="web")
