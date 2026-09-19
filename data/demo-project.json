@@ -1,0 +1,76 @@
+{
+  "id": "demo-hydep-frame",
+  "name": "Hydep Frame Assembly — 3D Demo",
+  "sourceMode": "photo",
+  "demo": true,
+  "description": "Built-in showcase project demonstrating manual steps, reference images and step-by-step 3D assembly animation.",
+  "steps": [
+    {
+      "number": 1,
+      "name": "Pick & load Frame Base",
+      "instruction": "Pick and load the Frame Base on the fixture with the help of the manipulator.",
+      "action": "PLACE",
+      "partName": "Frame Base",
+      "quantity": 1,
+      "reference": "/assets/hydep/base.svg"
+    },
+    {
+      "number": 2,
+      "name": "Scan QR Code",
+      "instruction": "Scan the QR Code with the hand-held scanner.",
+      "action": "SCAN",
+      "partName": "Frame Base",
+      "quantity": 1,
+      "reference": "/assets/hydep/base.svg"
+    },
+    {
+      "number": 3,
+      "name": "Place Frame Gasket Cathode",
+      "instruction": "Pick the Frame Gasket Cathode and place it on the frame base.",
+      "action": "PLACE",
+      "partName": "Frame Gasket Cathode",
+      "quantity": 1,
+      "reference": "/assets/hydep/gasket.svg"
+    },
+    {
+      "number": 4,
+      "name": "Place Manifold Gasket",
+      "instruction": "Pick the manifold gasket and place it on the frame base.",
+      "action": "PLACE",
+      "partName": "Manifold Gasket",
+      "quantity": 2,
+      "reference": "/assets/hydep/manifold.svg"
+    },
+    {
+      "number": 5,
+      "name": "Place Frame Cover",
+      "instruction": "Pick the Frame Cover and place it on the frame base.",
+      "action": "PLACE",
+      "partName": "Frame Cover",
+      "quantity": 1,
+      "reference": "/assets/hydep/cover.svg"
+    },
+    {
+      "number": 6,
+      "name": "Move barcode to placard",
+      "instruction": "Remove the Bar Code from the Frame Cover and stick it on the placard.",
+      "action": "LABEL",
+      "partName": "Frame Cover",
+      "quantity": 1,
+      "reference": "/assets/hydep/cover.svg"
+    },
+    {
+      "number": 7,
+      "name": "Movement to next station",
+      "instruction": "Move the completed assembly to the next station.",
+      "action": "MOVE",
+      "partName": "Finished Assembly",
+      "quantity": 1,
+      "reference": "/assets/hydep/exploded.svg"
+    }
+  ],
+  "model": {
+    "type": "built-in-procedural",
+    "geometry": "hydep-frame-demo"
+  }
+}
