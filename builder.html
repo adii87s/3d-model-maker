@@ -205,7 +205,7 @@ function renderLibrary(){
  box.innerHTML="";
  state.savedProjects.forEach(p=>{
   const d=document.createElement("div"); d.className="projectcard";
-  const meta=p.demo?"7 assembly steps · Built-in 3D model":"${p.stepCount} steps · "+(p.sourceMode==="cad"?"CAD":p.sourceMode==="mixed"?"CAD + photo":"Photo");
+  const meta=p.demo?"7 assembly steps · Built-in 3D model":(p.stepCount+" steps · "+(p.sourceMode==="cad"?"CAD":p.sourceMode==="mixed"?"CAD + photo":"Photo"));
   const buttonText=p.demo?"Open & Play Demo":"Load";
   d.innerHTML='<strong>'+esc(p.name)+(p.demo?' <span class="chip">DEMO · 3D READY</span>':'')+'</strong><div class="meta">'+meta+'</div><div class="actions"><button class="btn primary load-project">'+buttonText+'</button>'+(p.demo?'':'<button class="btn danger delete-project">Delete</button>')+'</div>';
   d.querySelector(".load-project").onclick=()=>loadProject(p.id);
@@ -215,13 +215,13 @@ function renderLibrary(){
 async function loadProject(projectId){
  try{
   $("buildStatus").textContent="Loading saved assembly…";
-  const r=await fetch(API+"/api/projects/"+encodeURIComponent(projectId));
   if(projectId==="demo-hydep-frame"){
    loadDemo();
    await build();
    $("buildStatus").textContent="Demo 3D assembly ready. Click Assemble next or Auto play.";
    return;
   }
+  const r=await fetch(API+"/api/projects/"+encodeURIComponent(projectId));
   if(!r.ok){
    throw new Error("Could not load project");
   }
