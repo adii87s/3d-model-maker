@@ -159,7 +159,7 @@ def demo_project():
             {"number":6,"name":"Move barcode to placard","instruction":"Remove the Bar Code from the Frame Cover and stick it on the placard.","action":"LABEL","partName":"Frame Cover","quantity":1,"photoUrl":None},
             {"number":7,"name":"Movement to next station","instruction":"Move the assembly to the next station.","action":"MOVE","partName":"Assembly","quantity":1,"photoUrl":None}
         ],
-        "model":{"fileName":None,"modelUrl":None}
+        "model":{"fileName":None,"modelUrl":None,"builtIn3D":"hydep-procedural"}
     }
 
 def write_project(data:dict)->None:
