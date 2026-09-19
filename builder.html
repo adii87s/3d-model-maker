@@ -690,7 +690,8 @@ function loadDemo(){
 async function openHydepDemo(){
   loadDemo();
   await build();
-  $("buildStatus").textContent="Demo 3D assembly ready. Click Assemble next or Auto play.";
+  $("buildStatus").textContent="Demo 3D assembly ready. Playing the assembly sequence…";
+  setTimeout(()=>autoPlay(),350);
 }
 window.openHydepDemo=openHydepDemo;
 
