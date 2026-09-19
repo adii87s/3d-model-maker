@@ -7,7 +7,7 @@
 <style>
 :root{--bg:#eef3f7;--panel:#fff;--card:#f6f8fa;--text:#17212b;--muted:#667685;--line:#d3dce4;--blue:#1769b1;--blue2:#e6f1fb;--danger:#b42318;--good:#137333}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Arial,sans-serif}
-button,input,textarea,select{font:inherit}.app{max-width:1500px;margin:0 auto;padding:18px}.top{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:14px}.ey{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--blue)}h1{margin:3px 0;font-size:30px}h2{margin:4px 0 10px}.sub{margin:0;color:var(--muted);max-width:980px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:14px}.col{display:flex;flex-direction:column;gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:15px}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 13px;font-weight:700;cursor:pointer}.btn:hover{border-color:var(--blue)}.primary{background:var(--blue);border-color:var(--blue);color:#fff}.danger{color:var(--danger)}.field{display:flex;flex-direction:column;gap:5px}.field label{font-weight:700;font-size:12px}.field input,.field textarea,.field select{border:1px solid var(--line);border-radius:9px;padding:10px 11px;background:#fff}.field textarea{min-height:90px;resize:vertical}.projectgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stepform{display:grid;grid-template-columns:1fr 1fr;gap:10px}.wide{grid-column:1/-1}.filebox{border:1px dashed #aebdca;background:var(--card);border-radius:11px;padding:12px}.filebox input{width:100%}.preview{display:flex;gap:10px;align-items:center;margin-top:8px}.preview img{width:82px;height:62px;object-fit:cover;border-radius:8px;border:1px solid var(--line);background:#fff}.small{font-size:12px;color:var(--muted)}.steps{display:flex;flex-direction:column;gap:7px;max-height:470px;overflow:auto}.stepitem{display:grid;grid-template-columns:34px 1fr auto;gap:9px;align-items:start;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px}.stepitem.active{border-color:var(--blue);background:var(--blue2)}.num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);font-weight:800;color:var(--blue)}.stepitem strong{display:block}.stepitem p{margin:3px 0 0;color:var(--muted);font-size:12px}.thumb{width:70px;height:52px;object-fit:cover;border-radius:7px;border:1px solid var(--line)}.viewer{height:600px;border-radius:12px;overflow:hidden;background:#dfe7ee;border:1px solid var(--line)}.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.chips{display:flex;gap:6px;flex-wrap:wrap}.chip{padding:4px 9px;background:var(--card);border:1px solid var(--line);border-radius:999px;font-size:12px}.status{font-size:12px;color:var(--muted)}.status.good{color:var(--good)}.status.bad{color:var(--danger)}.notice{font-size:12px;color:#71520a;background:#fff8df;border:1px solid #e3c36a;border-radius:9px;padding:9px;margin-top:9px}.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.gallery img{width:100%;height:100px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}@media(max-width:1050px){.layout{grid-template-columns:1fr}.projectgrid,.stepform{grid-template-columns:1fr}.viewer{height:500px}}
+button,input,textarea,select{font:inherit}.app{max-width:1500px;margin:0 auto;padding:18px}.top{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:14px}.ey{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--blue)}h1{margin:3px 0;font-size:30px}h2{margin:4px 0 10px}.sub{margin:0;color:var(--muted);max-width:980px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:14px}.col{display:flex;flex-direction:column;gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:15px}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 13px;font-weight:700;cursor:pointer}.btn:hover{border-color:var(--blue)}.primary{background:var(--blue);border-color:var(--blue);color:#fff}.danger{color:var(--danger)}.field{display:flex;flex-direction:column;gap:5px}.field label{font-weight:700;font-size:12px}.field input,.field textarea,.field select{border:1px solid var(--line);border-radius:9px;padding:10px 11px;background:#fff}.field textarea{min-height:90px;resize:vertical}.projectgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stepform{display:grid;grid-template-columns:1fr 1fr;gap:10px}.wide{grid-column:1/-1}.filebox{border:1px dashed #aebdca;background:var(--card);border-radius:11px;padding:12px}.filebox input{width:100%}.preview{display:flex;gap:10px;align-items:center;margin-top:8px}.preview img{width:82px;height:62px;object-fit:cover;border-radius:8px;border:1px solid var(--line);background:#fff}.small{font-size:12px;color:var(--muted)}.steps{display:flex;flex-direction:column;gap:7px;max-height:470px;overflow:auto}.stepitem{display:grid;grid-template-columns:34px 1fr auto;gap:9px;align-items:start;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px}.stepitem.active{border-color:var(--blue);background:var(--blue2)}.num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);font-weight:800;color:var(--blue)}.stepitem strong{display:block}.stepitem p{margin:3px 0 0;color:var(--muted);font-size:12px}.thumb{width:70px;height:52px;object-fit:cover;border-radius:7px;border:1px solid var(--line)}.viewer{height:600px;border-radius:12px;overflow:hidden;background:#dfe7ee;border:1px solid var(--line)}.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.chips{display:flex;gap:6px;flex-wrap:wrap}.chip{padding:4px 9px;background:var(--card);border:1px solid var(--line);border-radius:999px;font-size:12px}.status{font-size:12px;color:var(--muted)}.status.good{color:var(--good)}.status.bad{color:var(--danger)}.notice{font-size:12px;color:#71520a;background:#fff8df;border:1px solid #e3c36a;border-radius:9px;padding:9px;margin-top:9px}.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.gallery img{width:100%;height:100px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}.library{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto}.projectcard{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px}.projectcard .meta{font-size:12px;color:var(--muted);margin:3px 0 7px}.projectcard .actions{display:flex;gap:6px;flex-wrap:wrap}.projectcard .actions .btn{padding:7px 9px;font-size:12px}.empty{font-size:12px;color:var(--muted);padding:8px}@media(max-width:1050px){.layout{grid-template-columns:1fr}.projectgrid,.stepform{grid-template-columns:1fr}.viewer{height:500px}}
 </style>
 </head>
 <body>
@@ -58,6 +58,7 @@ button,input,textarea,select{font:inherit}.app{max-width:1500px;margin:0 auto;pa
 </div>
 
 <aside class="col">
+<section class="card"><div class="row"><div><div class="ey">PROJECT LIBRARY</div><h2>Saved assemblies</h2></div><span class="chip" id="projectCount">0</span></div><div class="controls"><button class="btn primary" id="saveProjectBtn">Save current</button><button class="btn" id="refreshProjectsBtn">Refresh</button></div><div class="library" id="projectLibrary"><div class="empty">No saved assemblies yet.</div></div></section>
 <section class="card"><div class="row"><div><div class="ey">STEP LIST</div><h2>Your assembly</h2></div><span class="chip" id="stepCount">0</span></div><div class="steps" id="steps"></div></section>
 <section class="card"><div class="ey">CURRENT STEP</div><h2 id="currentTitle">Ready</h2><p class="sub" id="currentText">Add a step to begin.</p><div class="chips" id="currentChips"></div><div class="gallery" id="currentImage"></div></section>
 <section class="card"><div class="ey">SYSTEM STATUS</div><div class="row"><span>Backend</span><b id="backend">Checking…</b></div><div class="row" style="margin-top:7px"><span>CAD</span><b id="cadStatus">Not loaded</b></div><div class="row" style="margin-top:7px"><span>Photos</span><b id="photoStatus">0</b></div><div class="notice">The final assembly is always reviewable step-by-step before you treat it as an official work instruction.</div></section>
@@ -170,7 +171,7 @@ function addStep(){
  const name=$("stepName").value.trim(),text=$("stepText").value.trim(),part=$("partName").value.trim(),qty=Math.max(1,Number($("qty").value)||1),action=$("stepAction").value,photo=$("stepPhoto").files[0]||null;
  if(!name||!text){$("stepStatus").textContent="Step name and explanation are required.";return}
  const step={number:state.steps.length+1,name,instruction:text,action,partName:part||name,quantity:qty,photoFile:photo,photoUrl:photo?URL.createObjectURL(photo):null};
- state.steps.push(step); clearStep(); renderStepList();$("stepStatus").textContent=state.steps.length+" step(s) created";$("projectStatus").textContent=state.steps.length+" step(s) ready";$("photoStatus").textContent=state.steps.filter(s=>s.photoFile).length;
+ state.steps.push(step); clearStep(); renderStepList(); render(); $("stepStatus").textContent=state.steps.length+" step(s) created";$("projectStatus").textContent=state.steps.length+" step(s) ready";$("photoStatus").textContent=state.steps.filter(s=>s.photoFile).length;
 }
 function clearStep(){$("stepName").value="";$("stepText").value="";$("partName").value="";$("qty").value="1";$("stepAction").value="PLACE";$("stepPhoto").value="";$("photoPreview").innerHTML='<span class="small">No photo selected</span>'}
 function removeStep(i){state.steps.splice(i,1);state.steps.forEach((s,k)=>s.number=k+1);renderStepList();$("stepStatus").textContent=state.steps.length+" step(s) created";$("photoStatus").textContent=state.steps.filter(s=>s.photoFile).length}
@@ -178,6 +179,82 @@ function renderStepList(){const box=$("steps");box.innerHTML="";$("stepCount").t
 function render(){if(!state.steps.length){$("sceneTitle").textContent="No assembly yet";$("sceneMode").textContent="Waiting";$("sceneProgress").textContent="0 / 0";$("currentTitle").textContent="Ready";$("currentText").textContent="Add a step to begin.";return}const s=state.steps[state.stage-1]||state.steps[0];$("sceneTitle").textContent=$("projectName").value.trim()||"Generated assembly";$("sceneProgress").textContent=state.stage+" / "+state.steps.length;$("sceneMode").textContent=state.modelFile?"CAD + steps":"Photo/procedural";$("currentTitle").textContent=s.name;$("currentText").textContent=s.instruction;$("currentChips").innerHTML='<span class="chip">Action: '+esc(s.action)+'</span><span class="chip">Part: '+esc(s.partName)+'</span><span class="chip">Qty: '+s.quantity+'</span>';$("currentImage").innerHTML=s.photoUrl?'<img src="'+s.photoUrl+'" alt="Step photo" style="grid-column:1/-1;width:100%;height:180px;object-fit:contain;background:#fff;border-radius:8px;border:1px solid var(--line)">':'';renderStepList()}
 function esc(x){return String(x??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 function exportJson(){const data={version:"0.4",project:{name:$("projectName").value.trim()||"Generated assembly"},steps:state.steps.map(s=>({number:s.number,name:s.name,instruction:s.instruction,action:s.action,partName:s.partName,quantity:s.quantity,hasPhoto:!!s.photoFile})),model:{fileName:state.modelFile?.name||null,source:state.modelFile?"CAD":"photo/procedural"},review:{status:"requires-human-review"}};const u=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));const a=document.createElement("a");a.href=u;a.download="assembly.json";a.click();URL.revokeObjectURL(u)}
+
+async function fileFromUrl(url,fallbackName){
+ const r=await fetch(API+url); if(!r.ok)throw new Error("Could not load saved file");
+ const b=await r.blob(); const name=(url.split("/").pop()||fallbackName||"saved-file");
+ return new File([b],decodeURIComponent(name),{type:b.type||"application/octet-stream"});
+}
+async function refreshProjects(){
+ try{
+  const r=await fetch(API+"/api/projects"); if(!r.ok)throw new Error("Project library unavailable");
+  const x=await r.json(); state.savedProjects=x.projects||[]; renderLibrary();
+ }catch(e){ $("projectLibrary").innerHTML='<div class="empty">'+esc(e.message)+'</div>'; }
+}
+function renderLibrary(){
+ const box=$("projectLibrary"); $("projectCount").textContent=state.savedProjects.length;
+ if(!state.savedProjects.length){box.innerHTML='<div class="empty">No saved assemblies yet.</div>';return}
+ box.innerHTML="";
+ state.savedProjects.forEach(p=>{
+  const d=document.createElement("div"); d.className="projectcard";
+  const mode=p.sourceMode==="cad"?"CAD":p.sourceMode==="mixed"?"CAD + photo":"Photo";
+  d.innerHTML='<strong>'+esc(p.name)+(p.demo?' <span class="chip">Demo</span>':'')+'</strong><div class="meta">'+p.stepCount+' steps · '+mode+'</div><div class="actions"><button class="btn primary load-project">Load</button>'+(p.demo?'':'<button class="btn danger delete-project">Delete</button>')+'</div>';
+  d.querySelector(".load-project").onclick=()=>loadProject(p.id);
+  const del=d.querySelector(".delete-project"); if(del)del.onclick=()=>deleteProject(p.id);
+  box.appendChild(d);
+ });
+}
+async function loadProject(projectId){
+ try{
+  $("buildStatus").textContent="Loading saved assembly…";
+  const r=await fetch(API+"/api/projects/"+encodeURIComponent(projectId)); if(!r.ok)throw new Error("Could not load project");
+  const p=await r.json();
+  state.loadedProjectId=p.id; state.projectName=p.name; state.modelFile=null; state.steps=[];
+  $("projectName").value=p.name||""; $("sourceMode").value=p.sourceMode||"photo"; $("cadStatus").textContent="Not loaded";
+  for(const s of (p.steps||[])){
+   let photoFile=null;
+   if(s.photoUrl) photoFile=await fileFromUrl(s.photoUrl,"step-"+s.number+".png");
+   state.steps.push({...s,photoFile,photoUrl:s.photoUrl||null});
+  }
+  if(p.model?.modelUrl){
+   state.modelFile=await fileFromUrl(p.model.modelUrl,p.model.fileName||"assembly.glb");
+   $("cadStatus").textContent=p.model.fileName||"Saved 3D model";
+  }
+  $("photoStatus").textContent=state.steps.filter(s=>s.photoFile).length;
+  state.stage=0; state.explode=false; clear3D(); renderStepList(); render();
+  $("projectStatus").textContent="Loaded: "+p.name;
+  $("buildStatus").textContent="Saved assembly loaded. Click Build 3D to regenerate the viewer.";
+ }catch(e){console.error(e);$("buildStatus").textContent=e.message}
+}
+async function saveProject(options={}){
+ const silent=!!options.silent;
+ const name=$("projectName").value.trim()||"Untitled Assembly";
+ const data={id:state.loadedProjectId||null,name,sourceMode:$("sourceMode").value,steps:state.steps.map(s=>({number:s.number,name:s.name,instruction:s.instruction,action:s.action,partName:s.partName,quantity:s.quantity,photoUrl:s.photoUrl||null}))};
+ const fd=new FormData(); 
+ state.steps.forEach(s=>{
+  if(s.photoFile){const uploadName="__step_"+s.number+"__"+(s.photoFile.name||("step-"+s.number+".png")); s.photoUploadName=uploadName; data.steps[s.number-1].photoUploadName=uploadName; fd.append("photos",s.photoFile,uploadName)}
+ });
+ fd.append("project",JSON.stringify(data));
+ if(state.modelFile)fd.append("model_file",state.modelFile,state.modelFile.name||"assembly.glb");
+ const r=await fetch(API+"/api/projects",{method:"POST",body:fd});
+ if(!r.ok)throw new Error("Could not save assembly: "+await r.text());
+ const saved=await r.json(); state.loadedProjectId=saved.id;
+ saved.steps.forEach(s=>{const local=state.steps.find(x=>x.number===s.number);if(local)local.photoUrl=s.photoUrl||null});
+ $("projectStatus").textContent="Saved: "+saved.name; 
+ await refreshProjects();
+ if(!silent) $("buildStatus").textContent="Assembly saved in Project Library.";
+ return saved;
+}
+async function deleteProject(projectId){
+ if(!confirm("Delete this saved assembly?"))return;
+ try{
+  const r=await fetch(API+"/api/projects/"+encodeURIComponent(projectId),{method:"DELETE"});
+  if(!r.ok)throw new Error(await r.text());
+  if(state.loadedProjectId===projectId)state.loadedProjectId=null;
+  await refreshProjects();
+ }catch(e){$("buildStatus").textContent=e.message}
+}
+
 function loadDemo(){state.steps=[];state.modelFile=null;$("projectName").value="Hydep Frame Sub-Assembly";const rows=[
 ["Pick & load Frame Base","Pick and load the Frame Base on the fixture with the help of the manipulator.","Frame Base","PLACE",1],
 ["Scan QR Code","Scan the QR Code with the hand-held scanner.","Frame Base","SCAN",1],
@@ -191,7 +268,7 @@ rows.forEach(r=>state.steps.push({number:state.steps.length+1,name:r[0],instruct
 state.stage=0;clear3D();addDemoGeometry();render();$("buildStatus").textContent="Hydep demo loaded. Click Assemble next."}
 function addDemoGeometry(){clear3D();const total=state.steps.length;state.steps.forEach((s,i)=>addProceduralPart(s,i,total));fit();applyStage()}
 $("loadDemo").onclick=loadDemo;$("addStep").onclick=addStep;$("clearStep").onclick=clearStep;$("buildBtn").onclick=async()=>{try{$("buildStatus").textContent="Building 3D…";await build();$("buildStatus").textContent="3D assembly built successfully."}catch(e){console.error(e);$("buildStatus").textContent=e.message}};$("prevBtn").onclick=prev;$("nextBtn").onclick=next;$("autoBtn").onclick=auto;$("resetBtn").onclick=reset;$("explodeBtn").onclick=()=>{state.explode=!state.explode;$("explodeBtn").textContent=state.explode?"Collapse":"Exploded view"};$("exportBtn").onclick=exportJson;$("stepPhoto").onchange=e=>{const f=e.target.files[0];if(f)photoPreview(f)};$("modelFile").onchange=e=>{state.modelFile=e.target.files[0]||null;$("cadStatus").textContent=state.modelFile?state.modelFile.name:"Not loaded";render()};
-$("projectName").oninput=render;init3D();loadDemo();fetch(API+"/api/health").then(r=>r.json()).then(()=>$("backend").textContent="Connected").catch(()=>$("backend").textContent="Run python start.py");
+$("projectName").oninput=render;init3D();loadDemo();refreshProjects();fetch(API+"/api/health").then(r=>r.json()).then(()=>$("backend").textContent="Connected").catch(()=>$("backend").textContent="Run python start.py");
 })();
 </script>
 </body></html>
