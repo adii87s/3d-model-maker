@@ -91,7 +91,7 @@ function loop(now){requestAnimationFrame(loop);if(state.anim){const a=state.anim
 function updateExplode(){const f=state.explode?1:0;state.layers.forEach((l,i)=>{if(l.object.visible)l.object.position.z=l.rest.z+(i+1)*55*f})}
 function clear3D(){while(state.root.children.length){const o=state.root.children.pop();o.traverse(n=>{if(n.geometry)n.geometry.dispose();if(n.material){if(Array.isArray(n.material))n.material.forEach(m=>m.dispose());else n.material.dispose()}})}state.layers=[]}
 function restFor(index,total){return new THREE.Vector3((index-total/2)*110, index%2?35:-35, 40+index*22)}
-function addProceduralPart(step,index,total){
+function addProceduralPart(step,index,total){ if(step.action!=="PLACE") return;
  const p=new THREE.Group(); const c=[0x5b574b,0xf28c28,0xffa447,0x8f1f16,0x69747d,0x8d969d][index%6];
  let m;
  const n=(step.partName||step.name).toLowerCase();
@@ -110,15 +110,51 @@ async function addPhotoPart(step,index,total){
  const x=await r.json(); await new Promise((resolve,reject)=>state.loader.load(API+x.modelUrl,g=>{const o=g.scene;rootAdd(o,step,index,total,"photo");resolve()},undefined,reject));
 }
 function rootAdd(o,step,index,total,kind){o.position.copy(restFor(index,total));o.traverse(n=>{if(n.isMesh){n.castShadow=true;n.receiveShadow=true}});state.root.add(o);const rest=o.position.clone();o.position.z+=280+step.number*35;state.layers.push({object:o,rest,step:step.number,kind});}
+function textScore(a,b){a=String(a||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();b=String(b||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();if(!a||!b)return 0;if(a===b)return 100;if(a.includes(b)||b.includes(a))return 80;const A=new Set(a.split(/\s+/)),B=b.split(/\s+/);return B.reduce((n,x)=>n+(x.length>2&&A.has(x)?16:0),0)}
+function findCadTargets(scene,stepNames){
+ const groups=[];
+ scene.traverse(n=>{if(!n.name)return;const hasMesh=n.children?.some(x=>x.isMesh)||n.isMesh;if(hasMesh)groups.push(n)});
+ const used=new Set(),matches=[];
+ for(const s of stepNames){let best=null,bs=0;for(const n of groups){if(used.has(n.uuid))continue;const sc=textScore(n.name,s.partName||s.name);if(sc>bs){bs=sc;best=n}}if(best&&bs>=16){used.add(best.uuid);matches.push({node:best,step:s.number,score:bs})}}
+ return matches;
+}
 async function addCad(){
  const f=state.modelFile;if(!f)return;
- if(/\.glb$/i.test(f.name)||/\.gltf$/i.test(f.name)){const url=URL.createObjectURL(f);await new Promise((resolve,reject)=>state.loader.load(url,g=>{rootAdd(g.scene,{number:1},0,1,"cad");resolve()},undefined,reject));return}
- const fd=new FormData();fd.append("file",f);const r=await fetch(API+"/api/convert-step",{method:"POST",body:fd});if(!r.ok)throw new Error("STEP conversion failed: "+await r.text());const x=await r.json();const o=await new Promise((resolve,reject)=>state.loader.load(API+x.modelUrl,g=>resolve(g.scene),undefined,reject));rootAdd(o,{number:1},0,1,"cad");}
+ let obj,components=[];
+ if(/\.(glb|gltf)$/i.test(f.name)){
+   const url=URL.createObjectURL(f);
+   obj=await new Promise((resolve,reject)=>state.loader.load(url,g=>resolve(g.scene),undefined,reject));
+ }else{
+   const fd=new FormData();fd.append("file",f);
+   const r=await fetch(API+"/api/convert-step",{method:"POST",body:fd});
+   if(!r.ok)throw new Error("STEP conversion failed: "+await r.text());
+   const x=await r.json();components=x.assemblyParts||[];
+   obj=await new Promise((resolve,reject)=>state.loader.load(API+x.modelUrl,g=>resolve(g.scene),undefined,reject));
+ }
+ obj.traverse(n=>{if(n.isMesh){n.castShadow=true;n.receiveShadow=true;n.visible=false}});
+ state.root.add(obj);
+ const placeSteps=state.steps.filter(s=>s.action==="PLACE");
+ const matches=findCadTargets(obj,placeSteps);
+ if(matches.length){
+   matches.forEach(m=>{
+     m.node.traverse(n=>{if(n.isMesh)n.visible=true});
+     const rest=m.node.position.clone();
+     const start=rest.clone();start.z+=280+m.step*35;
+     m.node.position.copy(start);
+     state.layers.push({object:m.node,rest,step:m.step,kind:"cad"});
+   });
+ }else{
+   obj.traverse(n=>{if(n.isMesh)n.visible=true});
+   const rest=new THREE.Vector3(0,0,35);obj.position.copy(rest.clone().add(new THREE.Vector3(0,0,320)));
+   state.layers.push({object:obj,rest,step:1,kind:"cad"});
+ }
+ return {componentCount:components.length,matchedCount:matches.length};
+}
 async function build(){
  if(!state.steps.length){$("buildStatus").textContent="Add at least one step.";return}
  state.stage=0;state.explode=false;clear3D();
  const total=state.steps.length;
- for(let i=0;i<state.steps.length;i++){const s=state.steps[i];if(s.photoFile&&!state.modelFile)await addPhotoPart(s,i,total);else if(!state.modelFile)addProceduralPart(s,i,total)}
+ for(let i=0;i<state.steps.length;i++){const s=state.steps[i];if(s.action!=="PLACE")continue;if(s.photoFile&&!state.modelFile)await addPhotoPart(s,i,total);else if(!state.modelFile)addProceduralPart(s,i,total)}
  if(state.modelFile)await addCad();
  state.layers.forEach(l=>{l.object.visible=true;l.object.position.z=l.rest.z+280+l.step*35});fit();applyStage();render();
 }
