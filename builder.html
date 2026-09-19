@@ -75,6 +75,16 @@ h1{margin:3px 0;font-size:30px}h2{margin:4px 0 10px}
 </head>
 <body>
 <div id="bootError" class="boot"></div>
+<script>
+window.addEventListener("error",function(e){
+  const b=document.getElementById("bootError");
+  if(b){b.style.display="block";b.textContent="Application error: "+(e.message||"Unknown error");}
+});
+window.addEventListener("unhandledrejection",function(e){
+  const b=document.getElementById("bootError");
+  if(b){b.style.display="block";b.textContent="Application error: "+(e.reason?.message||e.reason||"Promise rejected");}
+});
+</script>
 <div class="app">
 <header class="top">
   <div>
@@ -607,7 +617,19 @@ function toggleExplode(){
 }
 
 function render(){
-  if(!state.steps.length)return;
+  if(!state.steps.length){
+    $("sceneTitle").textContent="No assembly yet";
+    $("sceneMode").textContent="Waiting";
+    $("sceneProgress").textContent="0 / 0";
+    $("currentTitle").textContent="Ready";
+    $("currentText").textContent="Add a step to begin.";
+    $("currentChips").innerHTML="";
+    $("currentImage").innerHTML="";
+    $("stepCount").textContent="0";
+    $("photoStatus").textContent="0";
+    $("steps").innerHTML="";
+    return;
+  }
   const s=state.steps[Math.max(0,state.stage-1)]||state.steps[0];
   $("sceneTitle").textContent=state.projectName||"Generated assembly";
   $("sceneProgress").textContent=state.stage+" / "+state.steps.length;
