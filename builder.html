@@ -11,6 +11,17 @@ button,input,textarea,select{font:inherit}.app{max-width:1500px;margin:0 auto;pa
 </style>
 </head>
 <body>
+<script>
+window.addEventListener("error",function(e){
+ const box=document.getElementById("bootError");
+ if(box){box.style.display="block";box.textContent="Application error: "+(e.message||"Unknown JavaScript error");}
+});
+window.addEventListener("unhandledrejection",function(e){
+ const box=document.getElementById("bootError");
+ if(box){box.style.display="block";box.textContent="Application error: "+(e.reason?.message||e.reason||"Unhandled promise rejection");}
+});
+</script>
+<div id="bootError" style="display:none;margin:12px 18px;padding:12px;border:1px solid #e3a8a8;background:#fff1f1;color:#8d1f1f;border-radius:10px;font-weight:700"></div>
 <div class="app">
 <header class="top">
 <div><div class="ey">ASSEMBLY INTELLIGENCE</div><h1>3D Assembly Maker</h1><p class="sub">Create an assembly manually: define each step, explain what happens, attach the photo for that step, and optionally provide a STEP/STP model. The software turns those inputs into an animated 3D assembly.</p></div>
@@ -66,10 +77,18 @@ button,input,textarea,select{font:inherit}.app{max-width:1500px;margin:0 auto;pa
 </div>
 </div>
 
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+  }
+}
+</script>
 <script type="module">
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
-import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/controls/OrbitControls.js";
-import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/loaders/GLTFLoader.js";
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 (function(){
 "use strict";
