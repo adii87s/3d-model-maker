@@ -66,10 +66,11 @@ button,input,textarea,select{font:inherit}.app{max-width:1500px;margin:0 auto;pa
 </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.180.0/examples/js/controls/OrbitControls.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.180.0/examples/js/loaders/GLTFLoader.js"></script>
-<script>
+<script type="module">
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/loaders/GLTFLoader.js";
+
 (function(){
 "use strict";
 const $=id=>document.getElementById(id);
@@ -81,10 +82,10 @@ function init3D(){
  state.scene=new THREE.Scene(); state.scene.background=new THREE.Color(0xdfe7ee);
  state.camera=new THREE.PerspectiveCamera(38,1,.1,10000); state.camera.up.set(0,0,1); state.camera.position.set(650,-780,500);
  state.renderer=new THREE.WebGLRenderer({antialias:true}); state.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)); state.renderer.shadowMap.enabled=true; v.appendChild(state.renderer.domElement);
- state.controls=new THREE.OrbitControls(state.camera,state.renderer.domElement); state.controls.enableDamping=true; state.controls.enablePan=false;
+ state.controls=new OrbitControls(state.camera,state.renderer.domElement); state.controls.enableDamping=true; state.controls.enablePan=false;
  state.scene.add(new THREE.HemisphereLight(0xffffff,0x30404d,1.4)); const d=new THREE.DirectionalLight(0xffffff,1.8); d.position.set(450,-450,850); state.scene.add(d);
  const floor=new THREE.Mesh(new THREE.PlaneGeometry(4000,2600),new THREE.MeshStandardMaterial({color:0x9ba9b6,roughness:1})); floor.position.z=-20; floor.receiveShadow=true; state.scene.add(floor);
- state.root=new THREE.Group(); state.scene.add(state.root); state.loader=new THREE.GLTFLoader();
+ state.root=new THREE.Group(); state.scene.add(state.root); state.loader=new GLTFLoader();
  resize(); window.addEventListener("resize",resize); requestAnimationFrame(loop);
 }
 function resize(){const v=$("viewer"),w=v.clientWidth||900,h=v.clientHeight||600;state.renderer.setSize(w,h,false);state.camera.aspect=w/h;state.camera.updateProjectionMatrix()}
