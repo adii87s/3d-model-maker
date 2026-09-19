@@ -186,10 +186,18 @@ async function fileFromUrl(url,fallbackName){
  return new File([b],decodeURIComponent(name),{type:b.type||"application/octet-stream"});
 }
 async function refreshProjects(){
+ const builtin=[{id:"demo-hydep-frame",name:"Hydep Frame Sub-Assembly Demo",demo:true,updatedAt:"2026-09-19T00:00:00+00:00",stepCount:7,sourceMode:"photo"}];
  try{
   const r=await fetch(API+"/api/projects"); if(!r.ok)throw new Error("Project library unavailable");
-  const x=await r.json(); state.savedProjects=x.projects||[]; renderLibrary();
- }catch(e){ $("projectLibrary").innerHTML='<div class="empty">'+esc(e.message)+'</div>'; }
+  const x=await r.json();
+  state.savedProjects=x.projects||[];
+  if(!state.savedProjects.some(p=>p.id==="demo-hydep-frame")) state.savedProjects=[...builtin,...state.savedProjects];
+  renderLibrary();
+ }catch(e){
+  state.savedProjects=builtin;
+  renderLibrary();
+  $("buildStatus").textContent="Showing built-in demo. Start the backend to enable saving/loading your own assemblies.";
+ }
 }
 function renderLibrary(){
  const box=$("projectLibrary"); $("projectCount").textContent=state.savedProjects.length;
@@ -207,7 +215,11 @@ function renderLibrary(){
 async function loadProject(projectId){
  try{
   $("buildStatus").textContent="Loading saved assembly…";
-  const r=await fetch(API+"/api/projects/"+encodeURIComponent(projectId)); if(!r.ok)throw new Error("Could not load project");
+  const r=await fetch(API+"/api/projects/"+encodeURIComponent(projectId));
+  if(!r.ok){
+   if(projectId==="demo-hydep-frame"){loadDemo();$("buildStatus").textContent="Built-in Hydep demo loaded. Click Build 3D.";return}
+   throw new Error("Could not load project");
+  }
   const p=await r.json();
   state.loadedProjectId=p.id; state.projectName=p.name; state.modelFile=null; state.steps=[];
   $("projectName").value=p.name||""; $("sourceMode").value=p.sourceMode||"photo"; $("cadStatus").textContent="Not loaded";
