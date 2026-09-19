@@ -1,0 +1,14 @@
+{
+  "projectName": "Generic Assembly Example",
+  "parts": [
+    {"id":"base","name":"Frame Base","partNumber":"BASE-001","quantity":1},
+    {"id":"gasket","name":"Frame Gasket","partNumber":"GSK-001","quantity":1},
+    {"id":"cover","name":"Frame Cover","partNumber":"COV-001","quantity":1}
+  ],
+  "references": [],
+  "steps": [
+    {"number":1,"name":"Load base","instruction":"Place the frame base on the fixture.","action":"PLACE","partId":"base"},
+    {"number":2,"name":"Place gasket","instruction":"Place the gasket on the base.","action":"PLACE","partId":"gasket"},
+    {"number":3,"name":"Place cover","instruction":"Place the cover on the base.","action":"PLACE","partId":"cover"}
+  ]
+}
