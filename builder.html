@@ -14,7 +14,7 @@ button,input,textarea,select{font:inherit}.app{max-width:1500px;margin:0 auto;pa
 <div class="app">
 <header class="top">
 <div><div class="ey">ASSEMBLY INTELLIGENCE</div><h1>3D Assembly Maker</h1><p class="sub">Create an assembly manually: define each step, explain what happens, attach the photo for that step, and optionally provide a STEP/STP model. The software turns those inputs into an animated 3D assembly.</p></div>
-<div class="controls" style="margin:0"><button class="btn" id="loadDemo">Load Hydep demo</button><button class="btn primary" id="exportBtn">Export assembly.json</button></div>
+<div class="controls" style="margin:0"><button class="btn" id="loadDemo">Open Hydep demo</button><button class="btn primary" id="exportBtn">Export assembly.json</button></div>
 </header>
 
 <div class="layout">
@@ -74,7 +74,7 @@ button,input,textarea,select{font:inherit}.app{max-width:1500px;margin:0 auto;pa
 "use strict";
 const $=id=>document.getElementById(id);
 const API="http://127.0.0.1:8000";
-const state={projectName:"",steps:[],stage:0,modelFile:null,photoCount:0,layers:[],root:null,scene:null,camera:null,renderer:null,controls:null,loader:null,anim:null,auto:false,explode:false};
+const state={projectName:"",steps:[],stage:0,modelFile:null,photoCount:0,layers:[],root:null,scene:null,camera:null,renderer:null,controls:null,loader:null,anim:null,auto:false,explode:false,savedProjects:[{id:"demo-hydep-frame",name:"Hydep Frame Sub-Assembly — 3D Demo",demo:true,updatedAt:"2026-09-19T00:00:00+00:00",stepCount:7,sourceMode:"photo",builtIn3D:"hydep-procedural"}]};
 
 function init3D(){
  const v=$("viewer");
@@ -186,17 +186,17 @@ async function fileFromUrl(url,fallbackName){
  return new File([b],decodeURIComponent(name),{type:b.type||"application/octet-stream"});
 }
 async function refreshProjects(){
- const builtin=[{id:"demo-hydep-frame",name:"Hydep Frame Sub-Assembly Demo",demo:true,updatedAt:"2026-09-19T00:00:00+00:00",stepCount:7,sourceMode:"photo"}];
+ const builtin=[{id:"demo-hydep-frame",name:"Hydep Frame Sub-Assembly — 3D Demo",demo:true,updatedAt:"2026-09-19T00:00:00+00:00",stepCount:7,sourceMode:"photo",builtIn3D:"hydep-procedural"}];
  try{
   const r=await fetch(API+"/api/projects"); if(!r.ok)throw new Error("Project library unavailable");
   const x=await r.json();
-  state.savedProjects=x.projects||[];
-  if(!state.savedProjects.some(p=>p.id==="demo-hydep-frame")) state.savedProjects=[...builtin,...state.savedProjects];
+  const remote=(x.projects||[]).filter(p=>p.id!=="demo-hydep-frame");
+  state.savedProjects=[...builtin,...remote];
   renderLibrary();
  }catch(e){
   state.savedProjects=builtin;
   renderLibrary();
-  $("buildStatus").textContent="Showing built-in demo. Start the backend to enable saving/loading your own assemblies.";
+  $("buildStatus").textContent="Built-in 3D demo is ready. Start the backend to save your own assemblies.";
  }
 }
 function renderLibrary(){
@@ -205,19 +205,24 @@ function renderLibrary(){
  box.innerHTML="";
  state.savedProjects.forEach(p=>{
   const d=document.createElement("div"); d.className="projectcard";
-  const mode=p.sourceMode==="cad"?"CAD":p.sourceMode==="mixed"?"CAD + photo":"Photo";
-  d.innerHTML='<strong>'+esc(p.name)+(p.demo?' <span class="chip">Demo</span>':'')+'</strong><div class="meta">'+p.stepCount+' steps · '+mode+'</div><div class="actions"><button class="btn primary load-project">Load</button>'+(p.demo?'':'<button class="btn danger delete-project">Delete</button>')+'</div>';
+  const meta=p.demo?"7 assembly steps · Built-in 3D model":"${p.stepCount} steps · "+(p.sourceMode==="cad"?"CAD":p.sourceMode==="mixed"?"CAD + photo":"Photo");
+  const buttonText=p.demo?"Open & Play Demo":"Load";
+  d.innerHTML='<strong>'+esc(p.name)+(p.demo?' <span class="chip">DEMO · 3D READY</span>':'')+'</strong><div class="meta">'+meta+'</div><div class="actions"><button class="btn primary load-project">'+buttonText+'</button>'+(p.demo?'':'<button class="btn danger delete-project">Delete</button>')+'</div>';
   d.querySelector(".load-project").onclick=()=>loadProject(p.id);
   const del=d.querySelector(".delete-project"); if(del)del.onclick=()=>deleteProject(p.id);
   box.appendChild(d);
- });
-}
+ });}
 async function loadProject(projectId){
  try{
   $("buildStatus").textContent="Loading saved assembly…";
   const r=await fetch(API+"/api/projects/"+encodeURIComponent(projectId));
+  if(projectId==="demo-hydep-frame"){
+   loadDemo();
+   await build();
+   $("buildStatus").textContent="Demo 3D assembly ready. Click Assemble next or Auto play.";
+   return;
+  }
   if(!r.ok){
-   if(projectId==="demo-hydep-frame"){loadDemo();$("buildStatus").textContent="Built-in Hydep demo loaded. Click Build 3D.";return}
    throw new Error("Could not load project");
   }
   const p=await r.json();
@@ -280,7 +285,7 @@ rows.forEach(r=>state.steps.push({number:state.steps.length+1,name:r[0],instruct
 state.stage=0;clear3D();addDemoGeometry();render();$("buildStatus").textContent="Hydep demo loaded. Click Assemble next."}
 function addDemoGeometry(){clear3D();const total=state.steps.length;state.steps.forEach((s,i)=>addProceduralPart(s,i,total));fit();applyStage()}
 $("loadDemo").onclick=loadDemo;$("addStep").onclick=addStep;$("clearStep").onclick=clearStep;$("buildBtn").onclick=async()=>{try{$("buildStatus").textContent="Building 3D…";await build();$("buildStatus").textContent="3D assembly built successfully."}catch(e){console.error(e);$("buildStatus").textContent=e.message}};$("prevBtn").onclick=prev;$("nextBtn").onclick=next;$("autoBtn").onclick=auto;$("resetBtn").onclick=reset;$("explodeBtn").onclick=()=>{state.explode=!state.explode;$("explodeBtn").textContent=state.explode?"Collapse":"Exploded view"};$("exportBtn").onclick=exportJson;$("stepPhoto").onchange=e=>{const f=e.target.files[0];if(f)photoPreview(f)};$("modelFile").onchange=e=>{state.modelFile=e.target.files[0]||null;$("cadStatus").textContent=state.modelFile?state.modelFile.name:"Not loaded";render()};
-$("projectName").oninput=render;init3D();loadDemo();refreshProjects();fetch(API+"/api/health").then(r=>r.json()).then(()=>$("backend").textContent="Connected").catch(()=>$("backend").textContent="Run python start.py");
+$("projectName").oninput=render;init3D();loadDemo();renderLibrary();refreshProjects();fetch(API+"/api/health").then(r=>r.json()).then(()=>$("backend").textContent="Connected").catch(()=>$("backend").textContent="Run python start.py");
 })();
 </script>
 </body></html>
