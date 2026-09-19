@@ -15,8 +15,12 @@ A manual assembly-definition and 3D animation application.
    - Photo for that step
 4. Build the 3D assembly.
 5. Review the result step-by-step.
+6. Save the assembly to the Project Library so it can be loaded again later.
 
 Excel upload is intentionally not part of the current UI.
+
+## Project Library
+Saved assemblies are stored by the local FastAPI backend. The library includes a seeded Hydep Frame Sub-Assembly demo and supports loading and deleting user-created projects. Build 3D also saves the current assembly automatically.
 
 ## 3D behavior
 
@@ -45,6 +49,7 @@ Open:
 - Exploded view
 - Reset
 - Export assembly.json
+- Project Library: Save current, Load, Delete, Refresh
 
 ## Accuracy
 
