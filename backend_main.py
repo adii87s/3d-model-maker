@@ -143,23 +143,24 @@ def project_dir(project_id:str)->Path:
     return PROJECTS/project_id
 
 def demo_project():
+    path=ROOT/"data"/"demo-project.json"
+    if path.exists():
+        data=json.loads(path.read_text(encoding="utf-8"))
+        data.setdefault("createdAt","2026-09-19T00:00:00+00:00")
+        data.setdefault("updatedAt",data["createdAt"])
+        data.setdefault("model",{"type":"built-in-procedural","geometry":"hydep-frame-demo"})
+        for step in data.get("steps",[]):
+            step["photoUrl"]=step.get("photoUrl") or step.get("reference")
+        return data
     return {
         "id":"demo-hydep-frame",
-        "name":"Hydep Frame Sub-Assembly Demo",
+        "name":"Hydep Frame Assembly — 3D Demo",
         "sourceMode":"photo",
         "demo":True,
         "createdAt":"2026-09-19T00:00:00+00:00",
         "updatedAt":"2026-09-19T00:00:00+00:00",
-        "steps":[
-            {"number":1,"name":"Pick & load Frame Base","instruction":"Pick and load the Frame Base on the fixture with the help of the manipulator.","action":"PLACE","partName":"Frame Base","quantity":1,"photoUrl":None},
-            {"number":2,"name":"Scan QR Code","instruction":"Scan the QR Code with the hand-held scanner.","action":"SCAN","partName":"Frame Base","quantity":1,"photoUrl":None},
-            {"number":3,"name":"Place Frame Gasket Cathode","instruction":"Pick the Frame Gasket Cathode and place it on the frame base.","action":"PLACE","partName":"Frame Gasket Cathode","quantity":1,"photoUrl":None},
-            {"number":4,"name":"Place Manifold Gasket","instruction":"Pick the manifold gasket and place it on the frame base.","action":"PLACE","partName":"Manifold Gasket","quantity":2,"photoUrl":None},
-            {"number":5,"name":"Place Frame Cover","instruction":"Pick the Frame Cover and place it on the frame base.","action":"PLACE","partName":"Frame Cover","quantity":1,"photoUrl":None},
-            {"number":6,"name":"Move barcode to placard","instruction":"Remove the Bar Code from the Frame Cover and stick it on the placard.","action":"LABEL","partName":"Frame Cover","quantity":1,"photoUrl":None},
-            {"number":7,"name":"Movement to next station","instruction":"Move the assembly to the next station.","action":"MOVE","partName":"Assembly","quantity":1,"photoUrl":None}
-        ],
-        "model":{"fileName":None,"modelUrl":None,"builtIn3D":"hydep-procedural"}
+        "steps":[],
+        "model":{"type":"built-in-procedural","geometry":"hydep-frame-demo"}
     }
 
 def write_project(data:dict)->None:
