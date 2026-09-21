@@ -200,22 +200,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 const $=id=>document.getElementById(id);
 const API="http://127.0.0.1:8000";
 
-const DEMO={
-  id:"demo-hydep-frame",
-  name:"Hydep Frame Assembly — 3D Demo",
-  sourceMode:"photo",
-  demo:true,
-  steps:[
-    {number:1,name:"Pick & load Frame Base",instruction:"Pick and load the Frame Base on the fixture with the help of the manipulator.",action:"PLACE",partName:"Frame Base",quantity:1,reference:"/assets/hydep/base.svg"},
-    {number:2,name:"Scan QR Code",instruction:"Scan the QR Code with the hand-held scanner.",action:"SCAN",partName:"Frame Base",quantity:1,reference:"/assets/hydep/base.svg"},
-    {number:3,name:"Place Frame Gasket Cathode",instruction:"Pick the Frame Gasket Cathode and place it on the frame base.",action:"PLACE",partName:"Frame Gasket Cathode",quantity:1,reference:"/assets/hydep/gasket.svg"},
-    {number:4,name:"Place Manifold Gasket",instruction:"Pick the manifold gasket and place it on the frame base.",action:"PLACE",partName:"Manifold Gasket",quantity:2,reference:"/assets/hydep/manifold.svg"},
-    {number:5,name:"Place Frame Cover",instruction:"Pick the Frame Cover and place it on the frame base.",action:"PLACE",partName:"Frame Cover",quantity:1,reference:"/assets/hydep/cover.svg"},
-    {number:6,name:"Move barcode to placard",instruction:"Remove the Bar Code from the Frame Cover and stick it on the placard.",action:"LABEL",partName:"Frame Cover",quantity:1,reference:"/assets/hydep/cover.svg"},
-    {number:7,name:"Movement to next station",instruction:"Move the completed assembly to the next station.",action:"MOVE",partName:"Finished Assembly",quantity:1,reference:"/assets/hydep/exploded.svg"}
-  ]
-};
-
+const DEMO={"id":"demo-hydep-frame","name":"Hydep Frame Sub-Assembly - Station-01","sourceMode":"photo","demo":true,"description":"Built-in showcase demo based on the Hydep Op 30 workbook data.","sourceWorkbook":"Hydep_Stage Drawings(3).xlsx","sourceSheet":"Op 30","assemblyNo":"Op-30","workStation":"Station-01 (Frame Sub Assembly - Loading Station)","effectiveDate":"9-Dec-24","revisionLevel":"0","preparedBy":"Himanshu Verma","checkedBy":"Sgar C","page":"1 of 1","steps":[{"number":1,"name":"Pick & load Frame Base","instruction":"Pick & load Frame Base on Fixture with the help of Manipulator","action":"PLACE","partName":"Frame Base","quantity":1,"partNumber":"SSSDW-MDG-405","reference":"/assets/hydep/base.svg"},{"number":2,"name":"Scan QR Code","instruction":"Scan the QR Code with the help of the Hand Held Scanner","action":"SCAN","partName":"Frame Base","quantity":1,"partNumber":null,"reference":null},{"number":3,"name":"Place Frame Gasket Cathode","instruction":"Pick the Frame Gasket Cathode from the Trolley and place it on the frame base","action":"PLACE","partName":"Frame Gasket Cathode","quantity":1,"partNumber":"S1SDSDAW-MDG-602","reference":"/assets/hydep/gasket.svg"},{"number":4,"name":"Place manifold gasket","instruction":"Pick the manifold gasket from the Trolley and place it on the frame base","action":"PLACE","partName":"Manifold Gasket","quantity":2,"partNumber":"CDJD-01-02","reference":"/assets/hydep/manifold.svg"},{"number":5,"name":"Place Frame Cover","instruction":"Pick the Frame Cover from the trolley and place it on the frame base","action":"PLACE","partName":"Frame Cover","quantity":4,"partNumber":"SHSDHW-MDG-407","reference":"/assets/hydep/cover.svg"},{"number":6,"name":"Move barcode to placard","instruction":"Remove the Bar Code from the Frame Cover and stick on the placard","action":"LABEL","partName":"Frame Cover","quantity":1,"partNumber":null,"reference":null},{"number":7,"name":"Movement to next station","instruction":"Movement to next station","action":"MOVE","partName":"Assembly","quantity":1,"partNumber":null,"reference":"/assets/hydep/exploded.svg"}],"extraCareAlerts":["Make sure the calibration of the Fixture or Equipments is done before the start of every shift","Wear PPE while doing any operations ( Mandatory )","Enter the Part No. in SCADA if not scanned"],"toolsAndFixtures":["Tackle/Gripper","Scanner","Vacum Gripper","Vision / Camera"],"consumables":["Hand Gloves"],"processCharacteristics":[{"parameter":"Parts Should be free from dust, dirt and oil","pokaYoke":"Nil","measurement":"Nil","technique":"Visual","inspectionAssembler":"Every part","inspectionQA":"Twice per Shift"},{"parameter":"Parts should be free from Dent and Damages","pokaYoke":"Nil","measurement":"Nil","technique":"Visual","inspectionAssembler":"Every part","inspectionQA":"Twice per Shift"},{"parameter":"Orientation of Gasket","pokaYoke":"Nil","measurement":"Gasket O to be at Top","technique":"Data Capture OK/Not Ok against QR code","inspectionAssembler":"Every part","inspectionQA":"Twice per Shift"},{"parameter":"Part Tracebility"}],"reactionPlan":"Quarantine the assembly, inform shift incharge and supervisor immediately. Dis-assemble if necessary and check for faults / defects. All issues must be cleared within 2 hours.","model":{"type":"built-in-procedural","geometry":"hydep-frame-demo"}};
 const state={
   steps:[],stage:0,projectName:"",sourceMode:"photo",loadedProjectId:null,modelFile:null,
   layers:[],savedProjects:[],scene:null,camera:null,renderer:null,controls:null,loader:null,
@@ -229,7 +214,7 @@ window.addEventListener("error",e=>{if(e.message)showError("Application error: "
 window.addEventListener("unhandledrejection",e=>showError("Application error: "+(e.reason?.message||e.reason||"Promise rejected")));
 
 function cloneDemoSteps(){
-  return DEMO.steps.map(s=>({...s,photoFile:null,photoUrl:s.reference}));
+  return DEMO.steps.map(s=>({...s,photoFile:null,photoUrl:s.reference||null}));
 }
 
 function init3D(){
